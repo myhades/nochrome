@@ -1,4 +1,5 @@
 # nochrome
+24.10.24: OUTDATED due to Vivaldi's redesign, requires some tweaking
 An CSS theme for Vivaldi Browser, which aims to recreate Chromium look
 
 ![screenshot 1.png](screenshot%201.png)
