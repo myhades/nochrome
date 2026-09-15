@@ -157,6 +157,7 @@
   color: var(--nc-tab-ink) !important;
   display: grid !important;
   place-items: center;
+  position: relative;
 }
 #browser.tabs-top #tabs-container.top .tab .close:hover {
   background: color-mix(in srgb, var(--nc-ink) 15%, transparent);
