@@ -14,10 +14,10 @@
     "Reload": "Reload.svg",
     "Stop": "Stop.svg"
   },
-  "colorAccentBg": "#202124",
-  "colorBg": "#35363a",
+  "colorAccentBg": "#202020",
+  "colorBg": "#3c3c3c",
   "colorFg": "#e3e3e3",
-  "colorHighlightBg": "#a8c7fa",
+  "colorHighlightBg": "#8ab4f8",
   "colorWindowBg": "#202124",
   "contrast": 0,
   "dimBlurred": false,

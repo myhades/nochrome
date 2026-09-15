@@ -5,7 +5,9 @@
   --nc-surface: #ffffff;
   --nc-frame: #dfe3e7;
   --nc-ink: #1f1f1f;
-  --nc-muted: #474747;
+  --nc-muted: #5f6368;
+  --nc-disabled: #babcbe;
+  --nc-pressed: #d3e3fd;
   --nc-field: #f1f3f4;
   --nc-field-hover: #e9ebee;
   --nc-hover: #cdd1d5;
@@ -13,15 +15,17 @@
   --nc-focus: #0b57d0;
 }
 #browser.theme-dark {
-  --nc-surface: #35363a;
-  --nc-frame: #202124;
+  --nc-surface: #3c3c3c;
+  --nc-frame: #202020;
   --nc-ink: #e3e3e3;
-  --nc-muted: #c4c7c5;
-  --nc-field: #202124;
-  --nc-field-hover: #28292c;
+  --nc-muted: #c7c7c7;
+  --nc-disabled: #747474;
+  --nc-pressed: #4a5668;
+  --nc-field: #282828;
+  --nc-field-hover: #303030;
   --nc-hover: #414347;
   --nc-separator: #5f6368;
-  --nc-focus: #a8c7fa;
+  --nc-focus: #8ab4f8;
 }
 /* Follow the active scheduled theme, including manual previews. */
 #browser.color-accent-from-page {
@@ -210,12 +214,10 @@
   border-radius: 0 !important;
   corner-shape: round !important;
 }
-/* The theme SVG occupies a 24-unit canvas; Vivaldi's toolbar-large enlarges
-   it to 28px. Chrome's glyph canvas here is 20px inside a 34px target. */
-#browser .toolbar-addressbar .button-toolbar > button .button-icon,
-#browser .toolbar-addressbar .button-toolbar > button .button-icon svg,
-#browser .toolbar-addressbar .button-toolbar > button > svg,
-#browser .toolbar-addressbar .button-toolbar > button > img {
+/* Theme navigation SVGs use 24-unit canvases. Native Vivaldi glyphs have
+   padded 28-unit canvases: preserve those instead of shrinking every icon. */
+#browser .toolbar-addressbar [data-name]:is([data-name="Back"],[data-name="Forward"],[data-name="Reload"]) .button-icon,
+#browser .toolbar-addressbar [data-name]:is([data-name="Back"],[data-name="Forward"],[data-name="Reload"]) .button-icon svg {
   width: 20px !important;
   height: 20px !important;
   flex: 0 0 20px;
@@ -310,3 +312,71 @@
 
 #browser.tabs-top .toolbar-tabbar-before .button-toolbar > button { border-radius: 8px !important; }
 #browser.tabs-top #tabs-container.top .toolbar-tabbar-after { position: static !important; }
+
+/* The flex row consumes the empty header, so explicitly return that area
+   to the macOS window drag region. Interactive children opt out. */
+#browser.mac.tabs-top #tabs-container.top .resize,
+#browser.mac.tabs-top #tabs-container.top .tab-strip,
+#browser.mac.tabs-top #tabs-container.top .tab-strip > span {
+  -webkit-app-region: drag;
+  app-region: drag;
+}
+#browser.mac.tabs-top #tabs-container.top .tab-position,
+#browser.mac.tabs-top #tabs-container.top button,
+#browser.mac.tabs-top #tabs-container.top .button-toolbar {
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+}
+#browser .toolbar-addressbar .button-toolbar > button,
+#browser .toolbar-addressbar > button.vivaldi {
+  color: var(--nc-muted) !important;
+  fill: currentColor;
+}
+#browser .toolbar-addressbar .button-toolbar > button:disabled {
+  color: var(--nc-disabled) !important;
+  opacity: 1 !important;
+}
+#browser .toolbar-addressbar .button-toolbar > button:disabled :is(svg,img,.button-icon) {
+  opacity: 1 !important;
+}
+#browser .toolbar-addressbar .button-toolbar > button:is([aria-expanded="true"],[aria-pressed="true"],.button-pressed,.button-selected) {
+  background: var(--nc-pressed) !important;
+  color: var(--nc-ink) !important;
+}
+#browser .toolbar-addressbar .button-toolbar > button:not(:disabled):hover {
+  background: color-mix(in srgb, var(--nc-muted) 12%, transparent) !important;
+}
+#browser .bookmark-bar {
+  background: var(--nc-surface) !important;
+  color: var(--nc-muted) !important;
+}
+/* Restored native Vivaldi menu, visually placed after the profile button. */
+#browser .toolbar-addressbar > button.vivaldi {
+  display: flex !important;
+  order: 100;
+  position: relative !important;
+  inset: auto !important;
+  width: 34px !important; min-width: 34px !important;
+  height: 34px !important; min-height: 34px !important;
+  padding: 0 !important; margin: 0 !important;
+  border: 0 !important; border-radius: 50% !important;
+  background: transparent;
+  align-self: center;
+  align-items: center; justify-content: center;
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+}
+#browser .toolbar-addressbar > button.vivaldi > span { display: none; }
+#browser .toolbar-addressbar > button.vivaldi:is(:hover,.menu-open) {
+  background: color-mix(in srgb, var(--nc-muted) 12%, transparent);
+}
+/* The profile glyph needs its own size; do not scale unrelated buttons. */
+#browser .toolbar-addressbar [data-name="AccountButton"] :is(.button-icon,svg,img) {
+  width:24px !important; height:24px !important;
+}
+/* Preserve the native live download progress graphic while a transfer runs. */
+#browser#browser .toolbar-addressbar .button-toolbar:is([style*="--downloadInProgress: 1"],[style*="--downloadInProgress:1"]) [data-name="DownloadButton"] .button-icon {
+  mask: none; background: transparent;
+  width: 28px !important; height: 28px !important;
+}
+#browser#browser .toolbar-addressbar .button-toolbar:is([style*="--downloadInProgress: 1"],[style*="--downloadInProgress:1"]) [data-name="DownloadButton"] .button-icon > svg { visibility: visible; }
