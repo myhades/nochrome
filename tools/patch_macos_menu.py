@@ -51,6 +51,10 @@ TAB_CLOSE_FREEZE_OLD = '!e.pinned&&this.props.prefValues[P.kTabsAlignNext]&&e.id
 TAB_CLOSE_FREEZE_NEW = '!e.pinned&&e.id!==this.props.tabs.last()?.id&&this.freezeTabSize(e)'
 TAB_CLOSE_TOOLTIP_OLD = 'onMouseDown:i,title:a})'
 TAB_CLOSE_TOOLTIP_NEW = 'onMouseDown:i,"aria-label":a})'
+TAB_LEAVE_METHOD_OLD = 'getStyles=()=>{const{tabs:e,maxWidth:t,maxHeight:n}=this.props'
+TAB_LEAVE_METHOD_NEW = 'getLeaveStyle=e=>this.#Hn&&"tab"===e.data?.type?{...e.style,width:VP(18,OAe)}:null;getStyles=()=>{const{tabs:e,maxWidth:t,maxHeight:n}=this.props'
+TAB_LEAVE_RENDER_OLD = '(0,Hi.jsx)(oAe,{styles:t,children:e=>this.#ei(e,s,a,n)})'
+TAB_LEAVE_RENDER_NEW = '(0,Hi.jsx)(oAe,{styles:t,willLeave:this.getLeaveStyle,children:e=>this.#ei(e,s,a,n)})'
 
 def transform(source):
     # Migrate bundles patched by an earlier port revision before applying the
@@ -77,6 +81,8 @@ def transform(source):
         (TAB_CLOSE_ANIMATION_OLD, TAB_CLOSE_ANIMATION_NEW),
         (TAB_CLOSE_FREEZE_OLD, TAB_CLOSE_FREEZE_NEW),
         (TAB_CLOSE_TOOLTIP_OLD, TAB_CLOSE_TOOLTIP_NEW),
+        (TAB_LEAVE_METHOD_OLD, TAB_LEAVE_METHOD_NEW),
+        (TAB_LEAVE_RENDER_OLD, TAB_LEAVE_RENDER_NEW),
     ]
     for old, new in pairs:
         if source.count(new) == 1:

@@ -19,6 +19,7 @@
   --nc-separator: #e3e3e3;
   --nc-tab-separator: #c5c5c5;
   --nc-tab-ink: #474747;
+  --nc-siteinfo-ink: #000000;
   --nc-focus-ring: #739cf0;
   --nc-boundary: #e0e1df;
   /* neutral10 @ 0x0f over neutral100 */
@@ -45,6 +46,7 @@
   --nc-separator: #5f6368;
   --nc-tab-separator: #3e3e3e;
   --nc-tab-ink: #e4e4e4;
+  --nc-siteinfo-ink: #ffffff;
   --nc-boundary: #494b4a;
   --nc-dropdown-highlight: #505050;
   --nc-link: #a8c7fa;
@@ -126,7 +128,7 @@
   z-index: 1;
   flex: 0 0 32px;
   height: 32px;
-  padding-left: 8.5px;
+  padding-left: 8px;
   padding-right: 6px;
   align-items: center;
   transform: translateY(-2px);
@@ -279,6 +281,9 @@
   background: var(--nc-chip) !important;
   transition: background-color 250ms ease-in-out;
 }
+#browser .toolbar-addressbar .SiteInfoButton:not(.insecure) > button {
+  color: var(--nc-siteinfo-ink) !important;
+}
 #browser .toolbar-addressbar .SiteInfoButton :is(.button-icon,.button-icon svg) {
   width: 16px !important;
   height: 16px !important;
@@ -301,7 +306,7 @@
   background: var(--nc-chip) !important;
 }
 #browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within):not(:has(.OmniDropdown)) .SiteInfoButton.warning > button {
-  color: var(--nc-muted) !important;
+  color: var(--nc-siteinfo-ink) !important;
 }
 #browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within):not(:has(.OmniDropdown)) .SiteInfoButton.insecure > button {
   color: var(--nc-danger) !important;

@@ -25,7 +25,8 @@ def svg(filename, canvas):
                 raise ValueError(command)
             path.append(commands[command]+' '.join(args))
     assert path, filename
-    data = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {canvas} {canvas}"><path fill="black" fill-rule="nonzero" d="{" ".join(path)}"/></svg>'
+    fill_rule = 'evenodd' if filename == 'page_info_custom.icon' else 'nonzero'
+    data = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {canvas} {canvas}"><path fill="black" fill-rule="{fill_rule}" d="{" ".join(path)}"/></svg>'
     return 'url("data:image/svg+xml,'+quote(data,safe='')+'")'
 
 specs = [
@@ -46,7 +47,7 @@ for selector,filename,canvas,size in specs:
     css += [f'{selector} {{ width:{size}px !important; height:{size}px !important; flex:0 0 {size}px; background:currentColor; mask:{svg(filename,canvas)} center / contain no-repeat; }}',f'{selector} > svg {{ visibility:hidden; }}']
 css += [f'#browser .toolbar-addressbar > button.vivaldi::after {{ content:""; width:20px; height:20px; background:currentColor; mask:{svg("more_vert.icon",20)} center / contain no-repeat; pointer-events:none; }}']
 css += [f'#browser .toolbar-addressbar [data-name="Reload"] button[title^="Stop"] .button-icon {{ mask:{svg("close.icon",24)} center / contain no-repeat; }}']
-css += [f'#browser.tabs-top .toolbar-tabbar-before [data-name="TabButton"]::after {{ border:0 !important; transform:none !important; width:16px; height:16px; background:currentColor; mask:{svg("expand_more_old.icon",16)} center / contain no-repeat; filter:drop-shadow(.25px 0 currentColor) drop-shadow(-.25px 0 currentColor); }}']
+css += [f'#browser.tabs-top .toolbar-tabbar-before [data-name="TabButton"]::after {{ border:0 !important; transform:none !important; width:16px; height:16px; color:var(--nc-tab-ink) !important; background:currentColor; mask:{svg("expand_more_old.icon",16)} center / contain no-repeat; filter:drop-shadow(.4px 0 currentColor) drop-shadow(-.4px 0 currentColor); }}']
 css += ['#browser.tabs-top #tabs-container.top .tab .close > svg { display:none !important; }', f'#browser.tabs-top #tabs-container.top .tab .close::after {{ content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:14px !important; height:14px !important; background:currentColor; mask:{svg("close_weight500.icon",24)} center / contain no-repeat; filter:drop-shadow(.2px 0 currentColor) drop-shadow(-.2px 0 currentColor); }}']
 css += [f'#browser .toolbar-addressbar .BookmarkButton .button-on .button-icon {{ mask:{svg("star_active_chrome_refresh_old.icon",20)} center / contain no-repeat; }}']
 css += ['#browser .bookmark-bar .bookmarkbarItem.folder > .folder-icon { display:none !important; }', f'#browser .bookmark-bar .bookmarkbarItem.folder::before {{ content:""; width:16px; height:16px; flex:0 0 16px; background:currentColor; mask:{svg("folder_chrome_refresh_old.icon",20)} center / contain no-repeat; }}']
