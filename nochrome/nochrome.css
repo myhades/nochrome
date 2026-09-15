@@ -17,6 +17,9 @@
   --nc-control-hover: rgba(31,31,31,.059);
   --nc-omnibox-solid-hover: #dadada;
   --nc-separator: #e3e3e3;
+  --nc-tab-separator: #c5c5c5;
+  --nc-tab-ink: #474747;
+  --nc-focus-ring: #739cf0;
   --nc-boundary: #e0e1df;
   /* neutral10 @ 0x0f over neutral100 */
   --nc-dropdown-highlight: #f2f2f2;
@@ -40,6 +43,8 @@
   --nc-control-hover: rgba(253,252,251,.102);
   --nc-omnibox-solid-hover: #505050;
   --nc-separator: #5f6368;
+  --nc-tab-separator: #3e3e3e;
+  --nc-tab-ink: #cdcdcd;
   --nc-boundary: #494b4a;
   --nc-dropdown-highlight: #505050;
   --nc-link: #a8c7fa;
@@ -113,16 +118,18 @@
 }
 #browser.tabs-top #tabs-container.top .tab .title {
   padding-left: 6px;
-  margin-right: 5px;
+  margin-right: 6px;
   line-height: normal;
   opacity: 1;
+  color: var(--nc-tab-ink) !important;
 }
 #browser.tabs-top #tabs-container.top .tab .close {
   border-radius: 50%;
   width: 18px;
   height: 18px;
   margin-right: 0;
-  transform: translateX(-2px);
+  transform: translateX(-3px);
+  color: var(--nc-tab-ink) !important;
 }
 #browser.tabs-top #tabs-container.top .tab .close:hover {
   background: color-mix(in srgb, var(--nc-ink) 15%, transparent);
@@ -157,7 +164,7 @@
   height: 16px;
   width: 2px;
   border-radius: 999px;
-  background: var(--nc-separator);
+  background: var(--nc-tab-separator);
   pointer-events: none;
 }
 #browser.tabs-top #tabs-container.top :is(.toolbar-tabbar-before, .toolbar-tabbar-after) .button-toolbar > button {
@@ -204,7 +211,12 @@
 #browser .toolbar-addressbar .UrlBar-AddressField:focus-within {
   background: var(--nc-surface) !important;
   outline: 0 !important;
+  box-shadow: inset 0 0 0 2px var(--nc-focus-ring) !important;
   transition: none;
+}
+#browser .toolbar-addressbar .UrlBar-AddressField ::selection {
+  background: var(--nc-focus-ring);
+  color: #ffffff;
 }
 #browser .toolbar-addressbar .UrlField,
 #browser .toolbar-addressbar #urlFieldInput { font-size: 14px !important; color: var(--nc-ink); }
@@ -556,7 +568,7 @@
 #browser.tabs-top #tabs-container.top .tab-position:has(> .tab-wrapper > .tab:hover) .tab-header::after,
 #browser.tabs-top #tabs-container.top .tab-strip > span:has(+ span > .tab-position > .tab-wrapper > .tab:hover) > .tab-position .tab-header::after {
   opacity: 0 !important;
-  transition: opacity 200ms ease-in-out !important;
+  transition: none !important;
 }
 #browser.tabs-top #tabs-container.top .tab:not(.active) {
   left: 1px;
@@ -740,7 +752,7 @@
   border-radius: 17px !important;
   background: var(--nc-surface) !important;
   outline: 0 !important;
-  box-shadow: 0 10px 26px rgba(0,0,0,.36), 0 2px 8px rgba(0,0,0,.22) !important;
+  box-shadow: inset 0 0 0 2px var(--nc-focus-ring), 0 10px 26px rgba(0,0,0,.36), 0 2px 8px rgba(0,0,0,.22) !important;
 }
 #browser .toolbar-addressbar .OmniDropdown {
   left: -4px !important;
