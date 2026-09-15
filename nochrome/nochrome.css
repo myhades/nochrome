@@ -5,33 +5,41 @@
   --nc-surface: #ffffff;
   --nc-frame: #e3e3e3;
   --nc-ink: #1f1f1f;
-  --nc-muted: #5f6368;
-  --nc-disabled: #babcbe;
+  --nc-muted: #474747;
+  --nc-disabled: #9f9f9f;
   --nc-pressed: #d3e3fd;
   --nc-field: #efeded;
-  --nc-field-hover: #e8e6e6;
-  --nc-hover: #d0d0d0;
+  --nc-field-hover: #e1dfdf;
+  --nc-hover: #c7c7c7;
+  --nc-chip: #ffffff;
+  --nc-control-hover: rgba(31,31,31,.059);
   --nc-separator: #e3e3e3;
   --nc-boundary: #e0e1df;
-  --nc-dropdown-highlight: #f1f1f1;
+  --nc-dropdown-highlight: #f0f0f0;
   --nc-link: #0b57d0;
   --nc-focus: #0b57d0;
+  --nc-danger: #b3261e;
+  --nc-on-danger: #ffffff;
 }
 #browser.theme-dark {
   --nc-surface: #3c3c3c;
   --nc-frame: #1e2020;
-  --nc-ink: #e8eaed;
-  --nc-muted: #bdc1c6;
-  --nc-disabled: #6f7377;
+  --nc-ink: #e3e3e3;
+  --nc-muted: #c7c7c7;
+  --nc-disabled: #7b7b7b;
   --nc-pressed: #3f4f66;
   --nc-field: #282828;
-  --nc-field-hover: #303030;
-  --nc-hover: #363838;
+  --nc-field-hover: #4b4b4b;
+  --nc-hover: #474747;
+  --nc-chip: #3c3c3c;
+  --nc-control-hover: rgba(253,252,251,.102);
   --nc-separator: #5f6368;
   --nc-boundary: #494b4a;
-  --nc-dropdown-highlight: #545454;
-  --nc-link: #8ab4f8;
-  --nc-focus: #8ab4f8;
+  --nc-dropdown-highlight: #505050;
+  --nc-link: #a8c7fa;
+  --nc-focus: #a8c7fa;
+  --nc-danger: #f2b8b5;
+  --nc-on-danger: #601410;
 }
 /* Top-tab styling. Plain rows receive the flex layout below; complex
  * native rows retain their own positioning. */
@@ -76,10 +84,11 @@
   max-height: 28px !important;
   margin-top: 2px;
   border-radius: 8px !important;
-  transition: background-color 220ms ease !important;
+  transition: background-color 200ms ease-in !important;
 }
 #browser.tabs-top #tabs-container.top .tab-wrapper:hover .tab:not(.active) {
   background: var(--nc-hover) !important;
+  transition-timing-function: ease-out !important;
 }
 #browser.tabs-top #tabs-container.top .tab .tab-header {
   flex: 0 0 32px;
@@ -136,9 +145,9 @@
   content: "";
   position: absolute;
   right: 0;
-  top: 5px;
-  height: 18px;
-  width: 1.5px;
+  top: 6px;
+  height: 16px;
+  width: 2px;
   border-radius: 999px;
   background: var(--nc-separator);
   pointer-events: none;
@@ -189,8 +198,8 @@
 }
 #browser .toolbar-addressbar .UrlBar-AddressField:hover:not(:focus-within) { background: var(--nc-field-hover) !important; }
 #browser .toolbar-addressbar .UrlBar-AddressField:focus-within {
-  outline: 2px solid var(--nc-focus) !important;
-  outline-offset: -2px;
+  background: var(--nc-surface) !important;
+  outline: 0 !important;
 }
 #browser .toolbar-addressbar .UrlField,
 #browser .toolbar-addressbar #urlFieldInput { font-size: 14px !important; color: var(--nc-ink); }
@@ -205,7 +214,7 @@
 }
 #browser .toolbar-addressbar > .button-toolbar > button:hover,
 #browser .toolbar-addressbar .toolbar-extensions > .button-toolbar > button:hover {
-  background: color-mix(in srgb, var(--nc-ink) 10%, transparent);
+  background: var(--nc-control-hover);
 }
 #browser .toolbar-addressbar .SiteInfoButton {
   min-width: 28px !important;
@@ -221,10 +230,27 @@
   min-height: 28px !important;
   padding: 0 !important;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--nc-ink) 10%, transparent) !important;
+  background: var(--nc-chip) !important;
 }
 #browser .toolbar-addressbar .SiteInfoButton > button:hover {
-  background: color-mix(in srgb, var(--nc-ink) 16%, transparent) !important;
+  background: color-mix(in srgb, var(--nc-ink) 10%, var(--nc-chip)) !important;
+}
+#browser .toolbar-addressbar .SiteInfoButton > button:is(
+  [title*="Not Secure" i],
+  [title*="Certificate Error" i],
+  [title*="Security Error" i],
+  [title*="Dangerous" i]
+) {
+  background: var(--nc-danger) !important;
+  color: var(--nc-on-danger) !important;
+}
+#browser .toolbar-addressbar .SiteInfoButton > button:is(
+  [title*="Not Secure" i],
+  [title*="Certificate Error" i],
+  [title*="Security Error" i],
+  [title*="Dangerous" i]
+):hover {
+  background: color-mix(in srgb, var(--nc-on-danger) 10%, var(--nc-danger)) !important;
 }
 /* Keep native security icons, origin text, permission chips, popup anchors,
  * extensions and password controls. No blanket .toolbar-small hiding. */
@@ -265,21 +291,10 @@
 }
 #browser.tabs-top .tab .favicon { filter: none !important; }
 #browser.tabs-top .tab .close { background: transparent; }
-/* For ordinary top tabs use a 240px flex row, matching Chrome's desktop
-   default. Complex native stacks/scrolling keep their own layout. */
+/* Vivaldi's native tab layout is patched to Chrome's 240/56/32px width
+   constraints so its own spring preserves insert, close and relayout motion. */
 #browser.tabs-top #tabs-container.top:not(:has(.tab-group-indicator,.tab-wrapper.group,.tab-wrapper.accordion,.is-pinned,.tab-yield-space,.tab-acceptsdrop)) .resize:has(.tab-strip:not(.horizontal-scrolling)):has(.tab-position) {
   max-width: none !important;
-  flex: 0 1 auto;
-}
-#browser.tabs-top #tabs-container.top:not(:has(.tab-group-indicator,.tab-wrapper.group,.tab-wrapper.accordion,.is-pinned,.tab-yield-space,.tab-acceptsdrop)) .tab-strip:not(.horizontal-scrolling) {
-  display: flex;
-}
-#browser.tabs-top #tabs-container.top:not(:has(.tab-group-indicator,.tab-wrapper.group,.tab-wrapper.accordion,.is-pinned,.tab-yield-space,.tab-acceptsdrop)) .tab-strip:not(.horizontal-scrolling) .tab-position {
-  position: relative;
-  transform: none;
-  width: 233px;
-  flex: 0 1 233px;
-  min-width: 36px;
 }
 #browser.tabs-top #tabs-container.top .tab-wrapper { margin-right: 0; }
 
@@ -370,14 +385,14 @@
   color: var(--nc-ink) !important;
 }
 #browser .toolbar-addressbar .button-toolbar > button:not(:disabled):hover {
-  background: color-mix(in srgb, var(--nc-muted) 12%, transparent) !important;
+  background: var(--nc-control-hover) !important;
 }
 #browser .bookmark-bar {
   background: var(--nc-surface) !important;
   color: var(--nc-muted) !important;
   font-size: 13px !important;
-  height: 36px !important;
-  min-height: 36px !important;
+  height: 34px !important;
+  min-height: 34px !important;
   padding-block: 0 !important;
   border: 0 !important;
   border-bottom: 1px solid var(--nc-boundary) !important;
@@ -388,20 +403,23 @@
 }
 #browser .bookmark-bar .observer {
   align-items: center;
-  padding-inline: 12px !important;
+  padding-left: 6px !important;
+  padding-right: 8px !important;
 }
 #browser .bookmark-bar .bookmarkbarItem {
   height: 28px !important;
   min-height: 28px;
   margin-inline: 1px !important;
-  padding-inline: 10px !important;
+  padding-inline: 6px !important;
   border-radius: 999px !important;
   background: transparent !important;
   font-size: 13px !important;
-  transition: background-color 220ms ease !important;
+  gap: 6px !important;
+  transition: background-color 200ms ease-in !important;
 }
 #browser .bookmark-bar .bookmarkbarItem:hover {
-  background: color-mix(in srgb, var(--nc-ink) 11%, transparent) !important;
+  background: var(--nc-control-hover) !important;
+  transition-timing-function: ease-out !important;
 }
 #browser .bookmark-bar button .separator {
   width: 2px;
@@ -434,7 +452,7 @@
 }
 #browser .toolbar-addressbar > button.vivaldi > span { display: none; }
 #browser .toolbar-addressbar > button.vivaldi:is(:hover,.menu-open) {
-  background: color-mix(in srgb, var(--nc-muted) 12%, transparent);
+  background: var(--nc-control-hover);
 }
 /* The profile glyph needs its own size; do not scale unrelated buttons. */
 #browser .toolbar-addressbar [data-name="AccountButton"] :is(.button-icon,svg,img) {
@@ -454,7 +472,7 @@
 /* Chrome 152 geometry and states. */
 #browser.tabs-top #tabs-container.top .tab:not(.active, .pinned) .tab-header::after {
   opacity: 1;
-  transition: opacity 220ms ease;
+  transition: opacity 200ms ease-in;
 }
 #browser.tabs-top #tabs-container.top .tab-position:has(.tab.active) .tab-header::after,
 #browser.tabs-top #tabs-container.top .tab-position:has(+ .tab-position .tab.active) .tab-header::after,
@@ -465,7 +483,10 @@
   opacity: 0 !important;
   transition: none !important;
 }
-#browser.tabs-top #tabs-container.top .tab-position + .tab-position { margin-left: 2px !important; }
+#browser.tabs-top #tabs-container.top .tab:not(.active) {
+  left: 1px;
+  width: calc(100% - 2px) !important;
+}
 #browser.tabs-top #tabs-container.top .toolbar-tabbar-after .button-toolbar.newtab { left: calc(anchor(right) + 3px); }
 #browser#browser.tabs-top .newtab .button-icon {
   width: 20px !important;
@@ -475,15 +496,15 @@
 }
 
 /* noChrome's original Chrome tune badge and password shape. */
-#browser .toolbar-addressbar .SiteInfoButton .button-icon svg {
+#browser .toolbar-addressbar .SiteInfoButton > button[title="Site info"] .button-icon svg {
   width: 18px !important;
   height: 18px !important;
   overflow: visible !important;
 }
-#browser .toolbar-addressbar .SiteInfoButton .button-icon svg path:first-of-type {
+#browser .toolbar-addressbar .SiteInfoButton > button[title="Site info"] .button-icon svg path:first-of-type {
   d: path("M12.096 14.2797q-1.1176 0-1.8894-.7717T9.4348 11.6186q0-1.1176.7717-1.8894T12.096 8.9574q1.1176 0 1.8894.7717t.7717 1.8894q0 1.1176-.7717 1.8894t-1.8894.7717Zm0-1.4193q.5145 0 .8782-.3636t.3636-.8782q0-.5145-.3636-.8782t-.8782-.3636q-.5145 0-.8782.3636t-.3636.8782q0 .5145.3636.8782t.8782.3636Zm-9.7574-.5322v-1.4193h5.6771v1.4193H2.3385Zm1.5967-4.4352q-1.1176 0-1.8894-.7717T1.2741 5.2319q0-1.1176.7717-1.8894t1.8894-.7717q1.1176 0 1.8894.7717t.7717 1.8894q0 1.1176-.7717 1.8894t-1.8894.7717Zm0-1.4193q.5145 0 .8782-.3636t.3636-.8782q0-.5145-.3636-.8782T3.9352 3.99q-.5145 0-.8782.3636t-.3636.8782q0 .5145.3636.8782t.8782.3636Zm4.0804-.5322v-1.4193h5.6771v1.4193H8.0156Z") !important;
 }
-#browser .toolbar-addressbar .SiteInfoButton .button-icon svg path:not(:first-of-type) { display: none !important; }
+#browser .toolbar-addressbar .SiteInfoButton > button[title="Site info"] .button-icon svg path:not(:first-of-type) { display: none !important; }
 #browser .toolbar-addressbar .UrlFragments .UrlFragment--Lowlight {
   color: color-mix(in srgb, var(--nc-ink) 82%, var(--nc-field)) !important;
   opacity: 1 !important;
@@ -527,7 +548,7 @@
     radial-gradient(circle at 50% 72.5%, #000 1.45px, transparent 1.55px);
 }
 #browser .nc-chrome-menu-button:is(:hover,[aria-expanded="true"]) {
-  background: color-mix(in srgb, var(--nc-muted) 12%, transparent) !important;
+  background: var(--nc-control-hover) !important;
 }
 #browser .nc-chrome-menu-popup {
   position: absolute;
@@ -613,7 +634,7 @@
 /* Chrome-shaped omnibox popup, including its integrated input row. */
 #browser .toolbar-addressbar .UrlBar-AddressField:has(.OmniDropdown) {
   overflow: visible !important;
-  border-radius: 22px !important;
+  border-radius: 17px !important;
   background: var(--nc-surface) !important;
   outline: 0 !important;
   box-shadow: 0 8px 20px rgba(0,0,0,.28) !important;
@@ -623,10 +644,10 @@
   right: -4px !important;
   padding: 6px 4px 10px !important;
   border: 0 !important;
-  border-radius: 22px !important;
+  border-radius: 16px !important;
   background: var(--nc-surface) !important;
   color: var(--nc-ink) !important;
-  box-shadow: 0 8px 20px rgba(0,0,0,.28) !important;
+  box-shadow: none !important;
   line-height: 1.25;
 }
 #browser .toolbar-addressbar .below .OmniDropdown {
@@ -634,16 +655,21 @@
   padding-top: 39px !important;
 }
 #browser .toolbar-addressbar .OmniLinkItem {
-  --item-height: 42px;
-  --favicon-width: 20px;
-  --grid-gap: 12px;
-  min-height: 42px !important;
-  padding: 0 12px 0 16px !important;
-  border-radius: 20px !important;
+  --item-height: 40px;
+  --favicon-width: 40px;
+  --grid-gap: 0px;
+  min-height: 40px !important;
+  padding: 0 7px 0 4px !important;
+  border-radius: 0 20px 20px 0 !important;
   font-size: 14px !important;
   position: relative;
 }
-#browser .toolbar-addressbar .OmniLinkItem-Favicon,
+#browser .toolbar-addressbar .OmniLinkItem-Favicon {
+  width: 40px !important;
+  height: 40px !important;
+  display: grid !important;
+  place-items: center !important;
+}
 #browser .toolbar-addressbar .OmniLinkItem-Favicon :is(img,svg) {
   width: 20px !important;
   height: 20px !important;
@@ -678,20 +704,20 @@
 }
 
 /* Chromium paints a continuously rotating ring whose sweep eases in and out. */
-@property --nc-throbber-sweep {
-  syntax: "<percentage>";
+@property --nc-throbber-angle {
+  syntax: "<angle>";
   inherits: false;
-  initial-value: 22%;
+  initial-value: 5deg;
 }
 @keyframes nc-chrome-throbber-spin {
   to { transform: rotate(360deg); }
 }
 @keyframes nc-chrome-throbber-sweep {
-  0% { --nc-throbber-sweep: 14%; }
-  100% { --nc-throbber-sweep: 78%; }
+  0% { --nc-throbber-angle: 5deg; }
+  100% { --nc-throbber-angle: 270deg; }
 }
 #browser .tab .favicon:is(.progress.infinite-spin,.spinner) {
-  --nc-throbber-sweep: 22%;
+  --nc-throbber-angle: 80deg;
   width: 16px !important;
   min-width: 16px !important;
   height: 16px !important;
@@ -699,9 +725,29 @@
   margin: 1px !important;
   padding: 0 !important;
   border-radius: 50%;
-  background: conic-gradient(from -90deg, currentColor 0 var(--nc-throbber-sweep), transparent var(--nc-throbber-sweep) 100%) !important;
-  mask: radial-gradient(circle, transparent 0 5px, #000 5.35px 7px, transparent 7.35px) !important;
-  animation: nc-chrome-throbber-spin 850ms linear infinite,
-             nc-chrome-throbber-sweep 1.15s cubic-bezier(.4,0,.2,1) infinite alternate !important;
+  position: relative !important;
+  overflow: visible !important;
+  color: var(--nc-focus) !important;
+  background: conic-gradient(from -90deg, currentColor 0 var(--nc-throbber-angle), transparent var(--nc-throbber-angle) 360deg) !important;
+  mask: radial-gradient(circle, transparent 0 5.62px, #000 5.75px 7.88px, transparent 8px) !important;
+  animation: nc-chrome-throbber-spin 1568ms linear infinite,
+             nc-chrome-throbber-sweep 667ms cubic-bezier(.4,0,.2,1) infinite alternate !important;
 }
 #browser .tab .favicon.spinner > * { display: none !important; }
+#browser .tab .favicon:is(.progress.infinite-spin,.spinner)::before,
+#browser .tab .favicon:is(.progress.infinite-spin,.spinner)::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  z-index: 1;
+  left: 6.875px;
+  top: 0;
+  width: 2.25px;
+  height: 2.25px;
+  border-radius: 50%;
+  background: currentColor !important;
+}
+#browser .tab .favicon:is(.progress.infinite-spin,.spinner)::after {
+  transform-origin: 1.125px 8px;
+  transform: rotate(var(--nc-throbber-angle));
+}

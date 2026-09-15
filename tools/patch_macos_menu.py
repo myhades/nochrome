@@ -28,6 +28,16 @@ DOWNLOAD_HIDDEN_OLD = 'isHidden:this.props.isHidden,children:(0,Hi.jsx)(mz'
 DOWNLOAD_HIDDEN_NEW = 'isHidden:this.props.isHidden||!this.state.showChromeButton,children:(0,Hi.jsx)(mz'
 TOOLTIP_DELAY_OLD = 'appearDelay:(0,rz.Yt)(this.props.prefValues[P.kAutoHideEnabled])&&this.props.prefValues[P.kAutoHideTabBar]?600:200'
 TOOLTIP_DELAY_NEW = 'appearDelay:1100'
+TAB_SCROLL_OLD = 'isHorizontalScrollingEnabled=()=>this.props.prefValues[P.kTabsHorizontalScrolling]&&("top"===this.props.tabPosition||"bottom"===this.props.tabPosition)'
+TAB_SCROLL_NEW = 'isHorizontalScrollingEnabled=()=>!1'
+TAB_SCROLL_LAYOUT_OLD = 'const i=r[P.kTabsHorizontalScrolling];let s;return'
+TAB_SCROLL_LAYOUT_NEW = 'const i=!1;let s;return'
+TAB_WIDTHS_OLD = 'gAe=180,bAe=150,fAe=30'
+TAB_WIDTHS_NEW = 'gAe=240,bAe=150,fAe=32'
+TAB_MIN_WIDTHS_OLD = 'minWidth:t||e||i?s:0,flexBasis:t?u:e?s:fAe'
+TAB_MIN_WIDTHS_NEW = 'minWidth:t?u:e?Math.max(s||0,56):32,flexBasis:t?u:e?Math.max(s||0,56):32'
+TAB_SPRING_OLD = 'OAe={stiffness:600,damping:36,precision:1}'
+TAB_SPRING_NEW = 'OAe={stiffness:600,damping:50,precision:1}'
 
 def transform(source):
     pairs = [
@@ -39,6 +49,11 @@ def transform(source):
         (DOWNLOAD_CHANGE_OLD, DOWNLOAD_CHANGE_NEW),
         (DOWNLOAD_HIDDEN_OLD, DOWNLOAD_HIDDEN_NEW),
         (TOOLTIP_DELAY_OLD, TOOLTIP_DELAY_NEW),
+        (TAB_SCROLL_OLD, TAB_SCROLL_NEW),
+        (TAB_SCROLL_LAYOUT_OLD, TAB_SCROLL_LAYOUT_NEW),
+        (TAB_WIDTHS_OLD, TAB_WIDTHS_NEW),
+        (TAB_MIN_WIDTHS_OLD, TAB_MIN_WIDTHS_NEW),
+        (TAB_SPRING_OLD, TAB_SPRING_NEW),
     ]
     for old, new in pairs:
         if source.count(new) == 1:

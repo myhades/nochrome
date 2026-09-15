@@ -32,7 +32,7 @@ specs = [
     ('#browser .toolbar-addressbar [data-name="Back"] .button-icon', 'back_arrow_chrome_refresh_old.icon',20,20),
     ('#browser .toolbar-addressbar [data-name="Forward"] .button-icon', 'forward_arrow_chrome_refresh_old.icon',20,20),
     ('#browser .toolbar-addressbar [data-name="Reload"] .button-icon', 'reload_chrome_refresh_old.icon',20,20),
-    ('#browser .toolbar-addressbar .SiteInfoButton .button-icon', 'tune.icon',20,20),
+    ('#browser .toolbar-addressbar .SiteInfoButton > button[title="Site info"] .button-icon', 'tune.icon',20,20),
     ('#browser .toolbar-addressbar [data-name="Extensions"] .button-icon', 'extension_chrome_refresh_old.icon',20,20),
     ('#browser .toolbar-addressbar [data-name="ReadingList"] .button-icon', 'reading_list_old.icon',20,20),
     ('#browser .toolbar-addressbar [data-name="DownloadButton"] .button-icon', 'download_toolbar_button_chrome_refresh_old.icon',20,20),
@@ -47,7 +47,7 @@ css += [f'#browser .toolbar-addressbar [data-name="Reload"] button[title^="Stop"
 css += [f'#browser.tabs-top .toolbar-tabbar-before [data-name="TabButton"]::after {{ border:0 !important; transform:none !important; width:16px; height:16px; background:currentColor; mask:{svg("expand_more_old.icon",16)} center / contain no-repeat; }}']
 css += ['#browser.tabs-top #tabs-container.top .tab .close > svg { visibility:hidden; }', f'#browser.tabs-top #tabs-container.top .tab .close::after {{ content:""; width:16px; height:16px; background:currentColor; mask:{svg("close_tab_chrome_refresh_old.icon",16)} center / contain no-repeat; }}']
 css += [f'#browser .toolbar-addressbar .BookmarkButton .button-on .button-icon {{ mask:{svg("star_active_chrome_refresh_old.icon",20)} center / contain no-repeat; }}']
-css += ['#browser .bookmark-bar .bookmarkbarItem.folder > .folder-icon { display:none !important; }', f'#browser .bookmark-bar .bookmarkbarItem.folder::before {{ content:""; width:18px; height:18px; flex:0 0 18px; background:currentColor; mask:{svg("folder_chrome_refresh_old.icon",20)} center / contain no-repeat; }}']
+css += ['#browser .bookmark-bar .bookmarkbarItem.folder > .folder-icon { display:none !important; }', f'#browser .bookmark-bar .bookmarkbarItem.folder::before {{ content:""; width:16px; height:16px; flex:0 0 16px; background:currentColor; mask:{svg("folder_chrome_refresh_old.icon",20)} center / contain no-repeat; }}']
 css += ['#browser .toolbar-addressbar [data-name="AccountButton"] img[src*="IDR_PROFILE_VIVALDI_AVATAR"] { display:none !important; }', f'#browser .toolbar-addressbar [data-name="AccountButton"]:has(img[src*="IDR_PROFILE_VIVALDI_AVATAR"])::after {{ content:""; width:22px; height:22px; flex:0 0 22px; background:currentColor; mask:{svg("account_circle_outline.icon",20)} center / contain no-repeat; }}']
 (root/'nochrome/icons.css').write_text(('\n'.join(css)+'\n').replace('#browser ', '#browser#browser ').replace('#browser.tabs-top', '#browser#browser.tabs-top'))
 print('Generated icons.css')
