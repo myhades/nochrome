@@ -28,10 +28,12 @@ Recommended native layout: top tabs and address bar, Regular density, 100% UI zo
 - Explicit row height keeps the toolbar from covering the selected tab’s curved feet.
 - Reading List, download and extension controls share 20px icon canvases; the new-tab plus uses its own Chrome-sized canvas.
 - The native new-tab button is anchored to the last tab using CSS anchor positioning.
-- The bookmark row matches the navigation row height and meets it without a border.
-- Toolbar and tab separators are short, round-ended capsules; separators next to active or hovered tabs disappear.
+- The bookmark row is 40px, slightly shorter than the 44px navigation row, with a one-pixel lower boundary.
+- Toolbar and bookmark separators are short round-ended capsules. Tab separators are thinner and taller; those beside an active or hovered tab disappear immediately and fade back with the hover.
 - Active-tab corners change immediately, while inactive-tab hover color fades in and out.
 - Vivaldi’s segmented loading spinner is replaced with a continuously rotating, sweep-eased ring based on Chromium’s desktop throbber behavior.
+- The omnibox popup follows Chrome’s integrated rounded panel, row height, selection pill, text sizing and title/URL contrast.
+- Generic profiles use Chromium’s outlined account-circle icon; real profile avatars are reduced to 80% of their former size.
 - Broad rules that hid security text, toolbar children and permission UI removed.
 - Local CSS/SVG assets with no network requests at runtime.
 - The optional macOS patch adds an independent Chrome-shaped toolbar menu, preserves the native macOS menu bar, and makes the download control follow recent download activity.
@@ -62,6 +64,6 @@ The flex width override is gated on an existing `.tab-position`. This is require
 
 ## Icon, color and drag correction
 
-Native padded glyphs are no longer indiscriminately scaled. Chromium reading-list, download, bookmark-star, folder and menu vectors have individual canvas sizes. Native in-progress download artwork is retained during transfers. The dark toolbar uses Chrome’s #35363a, the tab strip and address field use #202124, main text uses #e8eaed, and secondary text uses #bdc1c6. Enabled, disabled and expanded states use separate colors.
+Native padded glyphs are no longer indiscriminately scaled. Chromium reading-list, download, bookmark-star, folder, account and menu vectors have individual canvas sizes. Native in-progress download artwork is retained during transfers. The measured dark frame, toolbar and address field colors are #1e2020, #3c3c3c and #282828; light uses #e3e3e3, #ffffff and #efeded. Enabled, disabled and expanded states use separate colors.
 
 The empty flex tab strip is explicitly a macOS drag region; tab and button targets remain interactive. The application menu is rendered independently in the toolbar so the macOS menu bar remains available.

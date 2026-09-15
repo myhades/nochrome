@@ -40,5 +40,6 @@ for selector,filename,canvas,size in specs:
 css += [f'#browser .toolbar-addressbar > button.vivaldi::after {{ content:""; width:20px; height:20px; background:currentColor; mask:{svg("more_vert.icon",20)} center / contain no-repeat; pointer-events:none; }}']
 css += [f'#browser .toolbar-addressbar .BookmarkButton .button-on .button-icon {{ mask:{svg("star_active_chrome_refresh_old.icon",20)} center / contain no-repeat; }}']
 css += ['#browser .bookmark-bar .bookmarkbarItem.folder > .folder-icon { display:none !important; }', f'#browser .bookmark-bar .bookmarkbarItem.folder::before {{ content:""; width:18px; height:18px; flex:0 0 18px; background:currentColor; mask:{svg("folder_chrome_refresh_old.icon",20)} center / contain no-repeat; }}']
+css += ['#browser .toolbar-addressbar [data-name="AccountButton"] img[src*="IDR_PROFILE_VIVALDI_AVATAR"] { display:none !important; }', f'#browser .toolbar-addressbar [data-name="AccountButton"]:has(img[src*="IDR_PROFILE_VIVALDI_AVATAR"])::after {{ content:""; width:20px; height:20px; background:currentColor; mask:{svg("account_circle_outline.icon",20)} center / contain no-repeat; }}']
 (root/'nochrome/icons.css').write_text(('\n'.join(css)+'\n').replace('#browser ', '#browser#browser ').replace('#browser.tabs-top', '#browser#browser.tabs-top'))
 print('Generated icons.css')
