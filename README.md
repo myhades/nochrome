@@ -31,7 +31,7 @@ Recommended native layout: top tabs and address bar, Regular density, 100% UI zo
 - The bookmark row is 34px, shorter than the 44px navigation row, with a one-pixel lower boundary.
 - Toolbar and bookmark separators are short round-ended capsules. Tab separators are thinner and taller; those beside an active or hovered tab disappear immediately and fade back with the hover.
 - Active-tab corners change immediately, while inactive-tab hover color fades in and out.
-- Tab insertion/removal uses Chromium's 18px overlap endpoint and a 150ms linear interpolation; closing mirrors opening, while closing a middle tab freezes the remaining widths until the pointer leaves the strip. New tabs expand toward available space and keep their right edge fixed once the strip reaches its reserved 20px trailing margin.
+- Tab insertion/removal uses Chromium's 18px overlap endpoint and a 150ms linear interpolation; closing mirrors opening. Once tabs are compressed, closing a non-trailing tab preserves their current width and close-button position across consecutive closes until the pointer leaves the full tab area. New tabs expand toward available space and keep their right edge fixed once the strip reaches its reserved 40px trailing margin.
 - Hover cards use Chromium's dynamic 300–1300ms delay, 256px width, 16:9 preview and a separate memory/hibernation footer.
 - Vivaldi’s segmented loading spinner is replaced with a continuously rotating, sweep-eased ring based on Chromium’s desktop throbber behavior.
 - The omnibox popup follows Chrome’s integrated rounded panel, row height, selection pill, text sizing and title/URL contrast.

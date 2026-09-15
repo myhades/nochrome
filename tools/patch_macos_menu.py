@@ -55,7 +55,16 @@ TAB_LEAVE_METHOD_NEW = 'getLeaveStyle=e=>this.#Hn&&"tab"===e.data?.type?{...e.st
 TAB_LEAVE_RENDER_OLD = '(0,Hi.jsx)(oAe,{styles:t,children:e=>this.#ei(e,s,a,n)})'
 TAB_LEAVE_RENDER_NEW = '(0,Hi.jsx)(oAe,{styles:t,willLeave:this.getLeaveStyle,children:e=>this.#ei(e,s,a,n)})'
 TAB_LAYOUT_RESERVE_OLD = 'const o=this.createFlexBoxLayout(e,t,n,{pageIdsHiddenForDrag:'
-TAB_LAYOUT_RESERVE_NEW = 'const o=this.createFlexBoxLayout(e,this.#Hn?Math.max(0,t-20):t,n,{pageIdsHiddenForDrag:'
+TAB_LAYOUT_RESERVE_PORT_V1 = 'const o=this.createFlexBoxLayout(e,this.#Hn?Math.max(0,t-20):t,n,{pageIdsHiddenForDrag:'
+TAB_LAYOUT_RESERVE_NEW = 'const o=this.createFlexBoxLayout(e,this.#Hn?Math.max(0,t-40):t,n,{pageIdsHiddenForDrag:'
+TAB_FREEZE_LAYOUT_OLD = 'const t=this.createFlexBoxLayout(this.props.tabs,this.props.maxWidth,this.props.maxHeight,{pageIdsHiddenForDrag:'
+TAB_FREEZE_LAYOUT_NEW = 'const t=this.createFlexBoxLayout(this.props.tabs,this.#Hn?Math.max(0,this.props.maxWidth-40):this.props.maxWidth,this.props.maxHeight,{pageIdsHiddenForDrag:'
+TAB_FREEZE_COMPRESSED_OLD = 'n=t.findIndex((t=>t.page.id===e)),i=t[n];if(i){let e;'
+TAB_FREEZE_COMPRESSED_NEW = 'n=t.findIndex((t=>t.page.id===e)),i=t[n];if(i&&i.layout?.width<gAe-.5){let e;'
+TAB_FREEZE_WIDTH_OLD = 'const t=e.layout?.width??this.props.maxWidth;this.setState({freeze:{width:t,height:'
+TAB_FREEZE_WIDTH_NEW = 'const t=this.state.freeze?.width??e.layout?.width??this.props.maxWidth;this.setState({freeze:{width:t,height:'
+TAB_FREEZE_EXIT_OLD = 'const{Element:t}=this.context,n=this.refTabStrip.current;if(n instanceof t){const t=n.getBoundingClientRect();'
+TAB_FREEZE_EXIT_NEW = 'const{Element:t}=this.context,n=this.refTabStrip.current?.closest("#tabs-container")??this.refTabStrip.current;if(n instanceof t){const t=n.getBoundingClientRect();'
 TAB_OPEN_GEOMETRY_OLD = 'this.context.requestAnimationFrame((()=>{this.#f&&this.forceUpdate()})),this.#Un=e.map((e=>e.key));const t=e.map((e=>({...e,style:{...e.style,width:0}})));return this.#Fn=r,[...s,...t]'
 TAB_OPEN_GEOMETRY_PORT_V1 = 'this.context.requestAnimationFrame((()=>{this.#f&&this.forceUpdate()})),this.#Un=e.map((e=>e.key));const t=e.map((e=>({...e,style:{...e.style,width:18}})));return this.#Fn=r,[...s,...t]'
 TAB_OPEN_GEOMETRY_BAD = 'this.context.requestAnimationFrame((()=>{this.#f&&this.forceUpdate()})),const t=Math.max(0,...s.filter((e=>"tab"===e.data?.type)).map((e=>vAe(e.style.x)+vAe(e.style.width))));this.#Un=e.map((e=>e.key));const n=e.map((e=>({...e,style:{...e.style,x:Math.max(vAe(e.style.x),t-18),width:18}})));return this.#Fn=r,[...s,...n]'
@@ -73,6 +82,8 @@ def transform(source):
         source = source.replace(TAB_OPEN_GEOMETRY_BAD, TAB_OPEN_GEOMETRY_NEW, 1)
     if source.count(TAB_OPEN_GEOMETRY_PORT_V1) == 1 and source.count(TAB_OPEN_GEOMETRY_NEW) == 0:
         source = source.replace(TAB_OPEN_GEOMETRY_PORT_V1, TAB_OPEN_GEOMETRY_NEW, 1)
+    if source.count(TAB_LAYOUT_RESERVE_PORT_V1) == 1 and source.count(TAB_LAYOUT_RESERVE_NEW) == 0:
+        source = source.replace(TAB_LAYOUT_RESERVE_PORT_V1, TAB_LAYOUT_RESERVE_NEW, 1)
     pairs = [
         (OLD, NEW),
         (CLASS_ANCHOR, CLASS_SOURCE),
@@ -94,6 +105,10 @@ def transform(source):
         (TAB_LEAVE_METHOD_OLD, TAB_LEAVE_METHOD_NEW),
         (TAB_LEAVE_RENDER_OLD, TAB_LEAVE_RENDER_NEW),
         (TAB_LAYOUT_RESERVE_OLD, TAB_LAYOUT_RESERVE_NEW),
+        (TAB_FREEZE_LAYOUT_OLD, TAB_FREEZE_LAYOUT_NEW),
+        (TAB_FREEZE_COMPRESSED_OLD, TAB_FREEZE_COMPRESSED_NEW),
+        (TAB_FREEZE_WIDTH_OLD, TAB_FREEZE_WIDTH_NEW),
+        (TAB_FREEZE_EXIT_OLD, TAB_FREEZE_EXIT_NEW),
         (TAB_OPEN_GEOMETRY_OLD, TAB_OPEN_GEOMETRY_NEW),
         (TAB_OPEN_SECOND_FRAME_OLD, TAB_OPEN_SECOND_FRAME_NEW),
     ]
