@@ -41,7 +41,8 @@ TAB_SPRING_PRIOR = 'OAe={stiffness:600,damping:50,precision:1}'
 TAB_SPRING_PORT_V1 = 'OAe={stiffness:1200,damping:70,precision:1}'
 TAB_SPRING_PORT_V2 = 'OAe={stiffness:1000,damping:63,precision:2}'
 TAB_LINEAR_PORT_V1 = 'OAe={stiffness:-1,damping:200,precision:.01}'
-TAB_SPRING_NEW = 'OAe={stiffness:-1,damping:150,precision:.01}'
+TAB_LINEAR_PORT_V2 = 'OAe={stiffness:-1,damping:150,precision:.01}'
+TAB_SPRING_NEW = 'OAe={stiffness:-1,damping:100,precision:.01}'
 SPRING_INTEGRATOR_OLD = 'function tP(e,t,n,i,s,a,o){const r=n+(-s*(t-i)+-a*n)*e,l=t+r*e;return Math.abs(r)<o&&Math.abs(l-i)<o?(eP[0]=i,eP[1]=0,eP):(eP[0]=l,eP[1]=r,eP)}'
 SPRING_INTEGRATOR_NEW = 'function tP(e,t,n,i,s,a,o){if(-1===s){(0===n||n*(i-t)<=0)&&(n=(i-t)/(a/1e3));const s=t+n*e;return n>0&&s>=i||n<0&&s<=i||Math.abs(s-i)<o?(eP[0]=i,eP[1]=0,eP):(eP[0]=s,eP[1]=n,eP)}const r=n+(-s*(t-i)+-a*n)*e,l=t+r*e;return Math.abs(r)<o&&Math.abs(l-i)<o?(eP[0]=i,eP[1]=0,eP):(eP[0]=l,eP[1]=r,eP)}'
 TAB_CLOSE_ANIMATION_OLD = 'this.setState({animate:!1},(()=>{this.props.closePage(i).then((()=>{this.allowDelayedAnimation()}))}))'
@@ -59,6 +60,8 @@ TAB_LAYOUT_RESERVE_PORT_V1 = 'const o=this.createFlexBoxLayout(e,this.#Hn?Math.m
 TAB_LAYOUT_RESERVE_NEW = 'const o=this.createFlexBoxLayout(e,this.#Hn?Math.max(0,t-40):t,n,{pageIdsHiddenForDrag:'
 TAB_FREEZE_LAYOUT_OLD = 'const t=this.createFlexBoxLayout(this.props.tabs,this.props.maxWidth,this.props.maxHeight,{pageIdsHiddenForDrag:'
 TAB_FREEZE_LAYOUT_NEW = 'const t=this.createFlexBoxLayout(this.props.tabs,this.#Hn?Math.max(0,this.props.maxWidth-40):this.props.maxWidth,this.props.maxHeight,{pageIdsHiddenForDrag:'
+TAB_FREEZE_CHILDREN_OLD = '}).children.map((e=>"tab"===e.type?e:void 0)).filter(Boolean),n=t.findIndex'
+TAB_FREEZE_CHILDREN_NEW = '}).children.flatMap((e=>e.children??[])).map((e=>"tab"===e.type?e:void 0)).filter(Boolean),n=t.findIndex'
 TAB_FREEZE_COMPRESSED_OLD = 'n=t.findIndex((t=>t.page.id===e)),i=t[n];if(i){let e;'
 TAB_FREEZE_COMPRESSED_NEW = 'n=t.findIndex((t=>t.page.id===e)),i=t[n];if(i&&i.layout?.width<gAe-.5){let e;'
 TAB_FREEZE_WIDTH_OLD = 'const t=e.layout?.width??this.props.maxWidth;this.setState({freeze:{width:t,height:'
@@ -75,7 +78,7 @@ TAB_OPEN_SECOND_FRAME_NEW = 'if(this.#Hn&&this.#Un.length)return this.#Un=[],thi
 def transform(source):
     # Migrate bundles patched by an earlier port revision before applying the
     # reviewed original-to-current substitutions below.
-    for prior_spring in (TAB_SPRING_PRIOR, TAB_SPRING_PORT_V1, TAB_SPRING_PORT_V2, TAB_LINEAR_PORT_V1):
+    for prior_spring in (TAB_SPRING_PRIOR, TAB_SPRING_PORT_V1, TAB_SPRING_PORT_V2, TAB_LINEAR_PORT_V1, TAB_LINEAR_PORT_V2):
         if source.count(prior_spring) == 1 and source.count(TAB_SPRING_NEW) == 0:
             source = source.replace(prior_spring, TAB_SPRING_NEW, 1)
     if source.count(TAB_OPEN_GEOMETRY_BAD) == 1 and source.count(TAB_OPEN_GEOMETRY_NEW) == 0:
@@ -106,6 +109,7 @@ def transform(source):
         (TAB_LEAVE_RENDER_OLD, TAB_LEAVE_RENDER_NEW),
         (TAB_LAYOUT_RESERVE_OLD, TAB_LAYOUT_RESERVE_NEW),
         (TAB_FREEZE_LAYOUT_OLD, TAB_FREEZE_LAYOUT_NEW),
+        (TAB_FREEZE_CHILDREN_OLD, TAB_FREEZE_CHILDREN_NEW),
         (TAB_FREEZE_COMPRESSED_OLD, TAB_FREEZE_COMPRESSED_NEW),
         (TAB_FREEZE_WIDTH_OLD, TAB_FREEZE_WIDTH_NEW),
         (TAB_FREEZE_EXIT_OLD, TAB_FREEZE_EXIT_NEW),
