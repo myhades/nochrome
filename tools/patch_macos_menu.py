@@ -26,6 +26,8 @@ DOWNLOAD_CHANGE_OLD = '_onDownloadStoreChange=()=>{this.setState({downloadProgre
 DOWNLOAD_CHANGE_NEW = '_onRecentChromeDownloads=e=>{const t=Math.max(...(e||[]).map((e=>new Date(e.startTime).getTime())).filter(Number.isFinite)),n=t+864e5-Date.now();Number.isFinite(t)&&n>0&&(this.hideChromeTimer&&clearTimeout(this.hideChromeTimer),this.setState({showChromeButton:!0}),this.hideChromeTimer=setTimeout((()=>this.setState({showChromeButton:!1,hadActiveDownload:!1})),n))};_onChromeDownloadCreated=e=>{this._onRecentChromeDownloads([e])};_onDownloadStoreChange=()=>{const e=hy.ZP.getTotalProgress();e?(this.hideChromeTimer&&clearTimeout(this.hideChromeTimer),this.setState({downloadProgress:e,showChromeButton:!0,hadActiveDownload:!0})):this.state.hadActiveDownload?(this.setState({downloadProgress:0}),this.hideChromeTimer&&clearTimeout(this.hideChromeTimer),this.hideChromeTimer=setTimeout((()=>this.setState({showChromeButton:!1,hadActiveDownload:!1})),864e5)):this.setState({downloadProgress:0})};'
 DOWNLOAD_HIDDEN_OLD = 'isHidden:this.props.isHidden,children:(0,Hi.jsx)(mz'
 DOWNLOAD_HIDDEN_NEW = 'isHidden:this.props.isHidden||!this.state.showChromeButton,children:(0,Hi.jsx)(mz'
+TOOLTIP_DELAY_OLD = 'appearDelay:(0,rz.Yt)(this.props.prefValues[P.kAutoHideEnabled])&&this.props.prefValues[P.kAutoHideTabBar]?600:200'
+TOOLTIP_DELAY_NEW = 'appearDelay:1100'
 
 def transform(source):
     pairs = [
@@ -36,6 +38,7 @@ def transform(source):
         (DOWNLOAD_UNMOUNT_OLD, DOWNLOAD_UNMOUNT_NEW),
         (DOWNLOAD_CHANGE_OLD, DOWNLOAD_CHANGE_NEW),
         (DOWNLOAD_HIDDEN_OLD, DOWNLOAD_HIDDEN_NEW),
+        (TOOLTIP_DELAY_OLD, TOOLTIP_DELAY_NEW),
     ]
     for old, new in pairs:
         if source.count(new) == 1:
