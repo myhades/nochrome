@@ -24,19 +24,23 @@ Recommended native layout: top tabs and address bar, Regular density, 100% UI zo
 - Light/dark Chrome-like palettes, a capsule address field and round toolbar buttons.
 - Upstream navigation and extension SVG icons packaged into both themes.
 - Current `.tab-wrapper` structure and macOS window controls supported.
-- Ordinary top tabs use a 240px flex layout; stacked, pinned and scrolling rows retain native positioning.
+- Ordinary top tabs use a 233px flex layout; stacked, pinned and scrolling rows retain native positioning.
 - Explicit row height keeps the toolbar from covering the selected tab’s curved feet.
-- SVG canvases are limited to 20px rather than Vivaldi toolbar-large’s 28px.
+- Reading List, download and extension controls share 20px icon canvases; the new-tab plus uses its own Chrome-sized canvas.
 - The native new-tab button is anchored to the last tab using CSS anchor positioning.
+- The bookmark row matches the navigation row height and meets it without a border.
+- Toolbar and tab separators are short, round-ended capsules; separators next to active or hovered tabs disappear.
+- Active-tab corners change immediately, while inactive-tab hover color fades in and out.
+- Vivaldi’s segmented loading spinner is replaced with a continuously rotating, sweep-eased ring based on Chromium’s desktop throbber behavior.
 - Broad rules that hid security text, toolbar children and permission UI removed.
 - Local CSS/SVG assets with no network requests at runtime.
-- The optional macOS menu patch restores Vivaldi’s menu component and uses its Mac context-menu interface with the existing command handlers.
+- The optional macOS patch adds an independent Chrome-shaped toolbar menu, preserves the native macOS menu bar, and makes the download control follow recent download activity.
 
 ## Verification and limits
 
-Manually checked light and dark appearance, theme schedule mappings, navigation to a real HTTPS page, the site-information popup, closing tabs, pointer selection, the adjacent new-tab button, empty-header window dragging, three-dot menu opening and Settings activation, drag reordering of three plain tabs, and a full restart with the CSS enabled. Theme archives are validated by `python3 tools/check_themes.py`.
+Manually checked light and dark appearance, theme schedule mappings, navigation to a real HTTPS page, the site-information popup, closing and switching tabs, the adjacent new-tab button, empty-header window dragging, three-dot menu opening and Settings activation, download-button visibility, the loading throbber, drag reordering of three plain tabs, and full restarts with the CSS enabled. Theme archives are validated by `python3 tools/check_themes.py`.
 
-The three-dot menu invokes Vivaldi commands; its contents retain Vivaldi’s menu structure. Chrome and Vivaldi also have different tab search, start pages and permission dialogs. These retain Vivaldi behavior. Complex tab stacks, overflowing rows, private windows and actual camera/microphone prompts have not been fully regression-tested. Windows/Linux and other display scales are untested. Do not infer pixel-level equivalence from the styling.
+The three-dot menu invokes Vivaldi commands through a Chrome-like layout. Chrome and Vivaldi also have different tab search, start pages and permission dialogs. These retain Vivaldi behavior. Complex tab stacks, overflowing rows, private windows and actual camera/microphone prompts have not been fully regression-tested. Windows/Linux and other display scales are untested. Do not infer pixel-level equivalence from the styling.
 
 ## Build and restore
 
@@ -52,12 +56,12 @@ The original stylesheet is preserved in `legacy/nochrome-v2.css`; keep it outsid
 
 ## 8.2 geometry correction
 
-The second pass fixes the first port's covered tab feet: the parent row now has a 34px content height plus 6px top padding, followed by a 44px toolbar and a 34px omnibox. Plain tabs use a 240px maximum width and 20px navigation SVG canvases. The tab search button sits before the tabs. The new-tab button follows the last tab through CSS anchor positioning; its containing toolbar must not establish a separate positioning context.
+The second pass fixes the first port's covered tab feet: the parent row now has a 34px content height plus 6px top padding, followed by a 44px toolbar and a 34px omnibox. Plain tabs use a 233px maximum width and 20px navigation SVG canvases. The tab search button sits before the tabs. The new-tab button follows the last tab through CSS anchor positioning; its containing toolbar must not establish a separate positioning context.
 
 The flex width override is gated on an existing `.tab-position`. This is required for the native initial measurement to run during session restoration; applying it to an empty row prevents tabs from appearing until an interaction.
 
 ## Icon, color and drag correction
 
-Native padded 28px glyphs are no longer indiscriminately reduced to 20px. The Chromium reading-list/download/folder/menu vectors have their own canvas sizes; the new-tab glyph is separately enlarged. Native in-progress download artwork is retained during transfers. The dark toolbar is neutral #3c3c3c, the tab strip #202020, and the address field #282828. Enabled/disabled/expanded states use separate colors.
+Native padded glyphs are no longer indiscriminately scaled. Chromium reading-list, download, bookmark-star, folder and menu vectors have individual canvas sizes. Native in-progress download artwork is retained during transfers. The dark toolbar uses Chrome’s #35363a, the tab strip and address field use #202124, main text uses #e8eaed, and secondary text uses #bdc1c6. Enabled, disabled and expanded states use separate colors.
 
-The empty flex tab strip is explicitly a macOS drag region; tab/button targets remain non-draggable as window chrome. The menu's first activation requests its content before opening, and uses the macOS-compatible context-menu path rather than the Windows/Linux Views menu path.
+The empty flex tab strip is explicitly a macOS drag region; tab and button targets remain interactive. The application menu is rendered independently in the toolbar so the macOS menu bar remains available.

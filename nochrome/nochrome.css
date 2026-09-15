@@ -10,20 +10,20 @@
   --nc-pressed: #d3e3fd;
   --nc-field: #f1f3f4;
   --nc-field-hover: #e9ebee;
-  --nc-hover: #cdd1d5;
+  --nc-hover: #c9cdd2;
   --nc-separator: #b5b9be;
   --nc-focus: #0b57d0;
 }
 #browser.theme-dark {
-  --nc-surface: #3c3c3c;
-  --nc-frame: #202020;
-  --nc-ink: #e3e3e3;
-  --nc-muted: #c7c7c7;
-  --nc-disabled: #747474;
-  --nc-pressed: #4a5668;
-  --nc-field: #282828;
-  --nc-field-hover: #303030;
-  --nc-hover: #414347;
+  --nc-surface: #35363a;
+  --nc-frame: #202124;
+  --nc-ink: #e8eaed;
+  --nc-muted: #bdc1c6;
+  --nc-disabled: #6f7377;
+  --nc-pressed: #3f4f66;
+  --nc-field: #202124;
+  --nc-field-hover: #292a2d;
+  --nc-hover: #292a2d;
   --nc-separator: #5f6368;
   --nc-focus: #8ab4f8;
 }
@@ -68,12 +68,19 @@
 #browser.tabs-top #tabs-container.top .tab.active {
   background: var(--nc-surface) !important;
   overflow: visible;
+  transition: none !important;
+  animation: none !important;
+}
+#browser.tabs-top #tabs-container.top .tab:not(.active) {
+  transition: background-color 160ms ease-out !important;
 }
 #browser.tabs-top #tabs-container.top .tab-wrapper:hover .tab:not(.active) {
   background: var(--nc-hover) !important;
   border-radius: 8px !important;
   height: 28px !important;
   margin-top: 1px;
+  transition-duration: 120ms !important;
+  transition-timing-function: ease-in !important;
 }
 #browser.tabs-top #tabs-container.top .tab .tab-header {
   flex: 0 0 32px;
@@ -130,9 +137,10 @@
   content: "";
   position: absolute;
   right: 0;
-  top: 8px;
-  height: 16px;
-  width: 1px;
+  top: 10px;
+  height: 14px;
+  width: 2px;
+  border-radius: 999px;
   background: var(--nc-separator);
   pointer-events: none;
 }
@@ -158,8 +166,8 @@
 #browser:not(.is-settingspage, .popup).address-top .mainbar {
   background: var(--nc-surface) !important;
   color: var(--nc-ink) !important;
-  border-radius: 0 !important;
-  border-bottom: 1px solid color-mix(in srgb, var(--nc-ink) 12%, transparent);
+  border-radius: 8px 8px 0 0 !important;
+  border-bottom: 0 !important;
 }
 #browser:not(.is-settingspage, .popup).address-top .mainbar .toolbar-addressbar.toolbar-visible {
   height: 44px !important;
@@ -182,7 +190,8 @@
   outline: 2px solid var(--nc-focus) !important;
   outline-offset: -2px;
 }
-#browser .toolbar-addressbar .UrlField { font-size: 13px; color: var(--nc-ink); }
+#browser .toolbar-addressbar .UrlField,
+#browser .toolbar-addressbar #urlFieldInput { font-size: 14px !important; color: var(--nc-ink); }
 #browser .toolbar-addressbar > .button-toolbar > button,
 #browser .toolbar-addressbar .toolbar-extensions > .button-toolbar > button {
   width: 32px;
@@ -206,13 +215,11 @@
 
 /* Vivaldi 8.2 measures its tab row at 30px even when the child is 34px.
    The explicit 34px content + 6px padding row above prevents the toolbar from covering the feet. */
-#browser.tabs-top #tabs-container.top .tab.active {
-  corner-shape: round !important;
-}
 #browser.tabs-top #tabs-container.top .tab.active::before,
 #browser.tabs-top #tabs-container.top .tab.active::after {
   border-radius: 0 !important;
-  corner-shape: round !important;
+  transition: none !important;
+  animation: none !important;
 }
 /* Theme navigation SVGs use 24-unit canvases. Native Vivaldi glyphs have
    padded 28-unit canvases: preserve those instead of shrinking every icon. */
@@ -251,8 +258,8 @@
 #browser.tabs-top #tabs-container.top:not(:has(.tab-group-indicator,.tab-wrapper.group,.tab-wrapper.accordion,.is-pinned,.tab-yield-space,.tab-acceptsdrop)) .tab-strip:not(.horizontal-scrolling) .tab-position {
   position: relative;
   transform: none;
-  width: 240px;
-  flex: 0 1 240px;
+  width: 233px;
+  flex: 0 1 233px;
   min-width: 36px;
 }
 #browser.tabs-top #tabs-container.top .tab-wrapper { margin-right: 0; }
@@ -349,6 +356,23 @@
 #browser .bookmark-bar {
   background: var(--nc-surface) !important;
   color: var(--nc-muted) !important;
+  font-size: 13px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  padding-block: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+#browser .bookmark-bar .observer { align-items: center; }
+#browser .bookmark-bar .bookmarkbarItem {
+  min-height: 28px;
+  font-size: 13px !important;
+}
+#browser .toolbar-addressbar .ContentBlocker-Control { display: none !important; }
+#browser#browser .toolbar-addressbar [data-name]:is([data-name="Extensions"],[data-name="ReadingList"],[data-name="DownloadButton"]) :is(.button-icon,.button-icon > svg) {
+  width: 20px !important;
+  height: 20px !important;
+  flex-basis: 20px;
 }
 /* Restored native Vivaldi menu, visually placed after the profile button. */
 #browser .toolbar-addressbar > button.vivaldi {
@@ -377,6 +401,188 @@
 /* Preserve the native live download progress graphic while a transfer runs. */
 #browser#browser .toolbar-addressbar .button-toolbar:is([style*="--downloadInProgress: 1"],[style*="--downloadInProgress:1"]) [data-name="DownloadButton"] .button-icon {
   mask: none; background: transparent;
-  width: 28px !important; height: 28px !important;
+  width: 20px !important; height: 20px !important;
 }
-#browser#browser .toolbar-addressbar .button-toolbar:is([style*="--downloadInProgress: 1"],[style*="--downloadInProgress:1"]) [data-name="DownloadButton"] .button-icon > svg { visibility: visible; }
+#browser#browser .toolbar-addressbar .button-toolbar:is([style*="--downloadInProgress: 1"],[style*="--downloadInProgress:1"]) [data-name="DownloadButton"] .button-icon > svg {
+  visibility: visible;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+/* Chrome 152 geometry and states. */
+#browser.tabs-top #tabs-container.top .tab:not(.active, .pinned) .tab-header::after {
+  opacity: 1;
+  transition: opacity 120ms ease;
+}
+#browser.tabs-top #tabs-container.top .tab-position:has(.tab:is(.active,:hover)) .tab-header::after,
+#browser.tabs-top #tabs-container.top .tab-position:has(+ .tab-position .tab:is(.active,:hover)) .tab-header::after {
+  opacity: 0 !important;
+}
+#browser.tabs-top #tabs-container.top .tab-position + .tab-position { margin-left: 0 !important; }
+#browser.tabs-top #tabs-container.top .toolbar-tabbar-after .button-toolbar.newtab { left: calc(anchor(right) + 3px); }
+#browser#browser.tabs-top .newtab .button-icon {
+  width: 26px !important;
+  height: 26px !important;
+  flex-basis: 26px;
+  mask-size: 26px 26px;
+}
+
+/* noChrome's original Chrome tune badge and password shape. */
+#browser .toolbar-addressbar .SiteInfoButton .button-icon svg {
+  width: 18px !important;
+  height: 18px !important;
+  overflow: visible !important;
+}
+#browser .toolbar-addressbar .SiteInfoButton .button-icon svg path:first-of-type {
+  d: path("M12.096 14.2797q-1.1176 0-1.8894-.7717T9.4348 11.6186q0-1.1176.7717-1.8894T12.096 8.9574q1.1176 0 1.8894.7717t.7717 1.8894q0 1.1176-.7717 1.8894t-1.8894.7717Zm0-1.4193q.5145 0 .8782-.3636t.3636-.8782q0-.5145-.3636-.8782t-.8782-.3636q-.5145 0-.8782.3636t-.3636.8782q0 .5145.3636.8782t.8782.3636Zm-9.7574-.5322v-1.4193h5.6771v1.4193H2.3385Zm1.5967-4.4352q-1.1176 0-1.8894-.7717T1.2741 5.2319q0-1.1176.7717-1.8894t1.8894-.7717q1.1176 0 1.8894.7717t.7717 1.8894q0 1.1176-.7717 1.8894t-1.8894.7717Zm0-1.4193q.5145 0 .8782-.3636t.3636-.8782q0-.5145-.3636-.8782T3.9352 3.99q-.5145 0-.8782.3636t-.3636.8782q0 .5145.3636.8782t.8782.3636Zm4.0804-.5322v-1.4193h5.6771v1.4193H8.0156Z") !important;
+}
+#browser .toolbar-addressbar .SiteInfoButton .button-icon svg path:not(:first-of-type) { display: none !important; }
+#browser .toolbar-addressbar .password-icon path:first-of-type {
+  d: path("M4.3 11q-.66 0-1.13-.47T2.7 9.4q0-.66.47-1.13T4.3 7.8q.66 0 1.13.47T5.9 9.4q0 .66-.47 1.13T4.3 11Zm0 3.2q-2 0-3.4-1.4T-.5 9.4q0-2 1.4-3.4t3.4-1.4q1.34 0 2.43.66T8.46 7h7.04l2.4 2.4-3.6 3.6-1.6-1.2-1.6 1.2-1.7-1.2h-.94q-.64 1.08-1.73 1.74T4.3 14.2Z") !important;
+}
+
+/* Chrome-style menu, independent of the native macOS menu. */
+#browser .toolbar-addressbar > .nc-chrome-menu-root {
+  position: relative;
+  order: 200;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  align-self: center;
+  overflow: visible;
+  -webkit-app-region: no-drag;
+}
+#browser .nc-chrome-menu-button {
+  width: 34px !important;
+  min-width: 34px !important;
+  height: 34px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--nc-muted) !important;
+}
+#browser .nc-chrome-menu-button::after {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 20px;
+  margin: auto;
+  background: currentColor;
+  mask:
+    radial-gradient(circle at 50% 27.5%, #000 1.45px, transparent 1.55px),
+    radial-gradient(circle at 50% 50%, #000 1.45px, transparent 1.55px),
+    radial-gradient(circle at 50% 72.5%, #000 1.45px, transparent 1.55px);
+}
+#browser .nc-chrome-menu-button:is(:hover,[aria-expanded="true"]) {
+  background: color-mix(in srgb, var(--nc-muted) 12%, transparent) !important;
+}
+#browser .nc-chrome-menu-popup {
+  position: absolute;
+  z-index: 100000;
+  top: 38px;
+  right: 2px;
+  width: 304px;
+  max-height: calc(100vh - 92px);
+  overflow-y: auto;
+  padding: 8px 0;
+  border: 1px solid color-mix(in srgb, var(--nc-ink) 14%, transparent);
+  border-radius: 12px;
+  background: var(--nc-surface);
+  color: var(--nc-ink);
+  box-shadow: 0 8px 24px rgba(0,0,0,.28), 0 2px 6px rgba(0,0,0,.18);
+  font-size: 13px;
+}
+#browser .nc-menu-item,
+#browser .nc-menu-zoom {
+  width: calc(100% - 16px);
+  min-height: 34px;
+  margin: 0 8px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  font: inherit;
+}
+#browser .nc-menu-item:hover,
+#browser .nc-menu-zoom button:hover { background: color-mix(in srgb, var(--nc-ink) 10%, transparent); }
+#browser .nc-menu-item kbd { color: var(--nc-muted); font: inherit; font-size: 12px; }
+#browser .nc-menu-separator { height: 1px; margin: 6px 0; background: color-mix(in srgb, var(--nc-ink) 14%, transparent); }
+#browser .nc-menu-zoom { gap: 6px; }
+#browser .nc-menu-zoom > span { flex: 1; }
+#browser .nc-menu-zoom button {
+  height: 28px;
+  min-width: 28px;
+  padding: 0 7px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+#browser .nc-menu-zoom .nc-menu-zoom-reset { border-radius: 6px; }
+
+/* The divider directly before the transient download button follows it. */
+#browser .toolbar-addressbar .toolbar-divider:has(+ #downloads[aria-hidden="true"]) { display: none !important; }
+
+/* Chrome uses short, round-ended separators instead of hairline SVG rules. */
+#browser .toolbar-addressbar .button-toolbar.toolbar-divider {
+  width: 12px !important;
+  min-width: 12px !important;
+  flex: 0 0 12px !important;
+  position: relative;
+}
+#browser .toolbar-addressbar .button-toolbar.toolbar-divider > button {
+  width: 12px !important;
+  min-width: 12px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  position: relative;
+}
+#browser .toolbar-addressbar .button-toolbar.toolbar-divider :is(.button-icon,svg) {
+  visibility: hidden !important;
+}
+#browser .toolbar-addressbar .button-toolbar.toolbar-divider > button::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 7px;
+  width: 2px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--nc-separator);
+}
+
+/* Chromium paints a continuously rotating ring whose sweep eases in and out. */
+@property --nc-throbber-sweep {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 22%;
+}
+@keyframes nc-chrome-throbber-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes nc-chrome-throbber-sweep {
+  0% { --nc-throbber-sweep: 14%; }
+  100% { --nc-throbber-sweep: 78%; }
+}
+#browser .tab .favicon.progress.infinite-spin {
+  --nc-throbber-sweep: 22%;
+  width: 16px !important;
+  min-width: 16px !important;
+  height: 16px !important;
+  min-height: 16px !important;
+  margin: 1px !important;
+  padding: 0 !important;
+  border-radius: 50%;
+  background: conic-gradient(from -90deg, currentColor 0 var(--nc-throbber-sweep), transparent var(--nc-throbber-sweep) 100%) !important;
+  mask: radial-gradient(circle, transparent 0 5px, #000 5.35px 7px, transparent 7.35px) !important;
+  animation: nc-chrome-throbber-spin 850ms linear infinite,
+             nc-chrome-throbber-sweep 1.15s cubic-bezier(.4,0,.2,1) infinite alternate !important;
+}

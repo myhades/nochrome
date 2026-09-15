@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Restore Vivaldi's existing menu component in its macOS address toolbar.
+"""Add a Chrome-shaped application menu to Vivaldi's macOS toolbar.
 
 Version-specific, fails closed if the reviewed render expression changes.
 Original application resource is backed up outside the repository.
@@ -11,23 +11,33 @@ import shutil
 
 VERSION = '8.2.4133.52'
 OLD = 'children:[!T.ZP.isRTL()&&i,false,this.state.buttons.map'
-NEW = 'children:[!T.ZP.isRTL()&&i,this.props.name===P.kToolbarsNavigation&&(0,Hi.jsx)(NW,{keyAccess:this.props.keyAccess,inert:!!this.props.inert,position:"mainbar",isHidden:!1}),this.state.buttons.map'
+NEW = 'children:[!T.ZP.isRTL()&&i,this.props.name===P.kToolbarsNavigation&&(0,Hi.jsx)(ncChromeMenu,{keyAccess:this.props.keyAccess,inert:!!this.props.inert}),this.state.buttons.map'
 
-REQUEST_OLD = '_requestMenu(){this.hasMenu||K.Z.requestNamedMenu(EW)}'
-REQUEST_NEW = '_requestMenu(){K.Z.requestNamedMenu(EW)}'
+CLASS_ANCHOR = 'const NW=(0,$i.Z)(kW,IW),ZW=Object.freeze'
+CLASS_SOURCE = '''class ncChromeMenu extends Wi.PureComponent{static contextType=Yi.Z;root=Wi.createRef();state={open:!1};componentDidMount(){this.context.document.addEventListener("pointerdown",this._outside,!0)}componentWillUnmount(){this.context.document.removeEventListener("pointerdown",this._outside,!0)}_outside=e=>{this.state.open&&!this.root.current?.contains(e.target)&&this.setState({open:!1})};_toggle=e=>{e.preventDefault(),e.stopPropagation(),this.setState((e=>({open:!e.open})))};_run=e=>{this.setState({open:!1}),K.Z.executeActions("event",this.context,e)};_key=e=>{"Escape"===e.key&&(this.setState({open:!1}),e.preventDefault(),e.stopPropagation())};_item=(e,t,n)=>(0,Hi.jsxs)("button",{type:"button",role:"menuitem",className:"nc-menu-item",onClick:()=>this._run(t),children:[(0,Hi.jsx)("span",{children:e}),n&&(0,Hi.jsx)("kbd",{children:n})]});_sep=()=>(0,Hi.jsx)("div",{className:"nc-menu-separator",role:"separator"});render(){return(0,Hi.jsxs)("div",{className:"nc-chrome-menu-root",ref:this.root,onKeyDown:this._key,children:[(0,Hi.jsx)("button",{type:"button",className:"ToolbarButton-Button nc-chrome-menu-button",title:"Menu",tabIndex:this.props.keyAccess,inert:this.props.inert,"data-name":"ChromeMenu","aria-label":"Menu","aria-haspopup":"menu","aria-expanded":this.state.open,onMouseDown:this._toggle}),this.state.open&&(0,Hi.jsxs)("div",{className:"nc-chrome-menu-popup",role:"menu",children:[this._item("New tab","COMMAND_NEW_TAB","⌘T"),this._item("New window","COMMAND_NEW_WINDOW","⌘N"),this._item("New private window","COMMAND_NEW_PRIVATE_WINDOW","⇧⌘N"),this._sep(),this._item("History","COMMAND_SHOW_HISTORY","⌘Y"),this._item("Downloads","COMMAND_SHOW_DOWNLOADS","⇧⌘J"),this._item("Bookmarks","COMMAND_SHOW_BOOKMARKS"),this._item("Extensions","COMMAND_SHOW_EXTENSIONS"),this._item("Delete browsing data","COMMAND_SHOW_CLEAR_PRIVATE_DATA"),this._sep(),(0,Hi.jsxs)("div",{className:"nc-menu-zoom",children:[(0,Hi.jsx)("span",{children:"Zoom"}),(0,Hi.jsx)("button",{type:"button",title:"Zoom out",onClick:()=>this._run("COMMAND_MAIN_ZOOM_OUT"),children:"−"}),(0,Hi.jsx)("button",{type:"button",className:"nc-menu-zoom-reset",onClick:()=>this._run("COMMAND_MAIN_ZOOM_RESET"),children:"100%"}),(0,Hi.jsx)("button",{type:"button",title:"Zoom in",onClick:()=>this._run("COMMAND_MAIN_ZOOM_IN"),children:"+"}),(0,Hi.jsx)("button",{type:"button",title:"Full screen",onClick:()=>this._run("COMMAND_FULLSCREEN"),children:"⛶"})]}),this._item("Print","COMMAND_PRINT_PAGE","⌘P"),this._item("Find","COMMAND_FIND_IN_PAGE","⌘F"),this._item("Save page as","COMMAND_SAVE_PAGE","⌘S"),this._sep(),this._item("Developer tools","COMMAND_DEVELOPER_TOOLS","⌥⌘I"),this._item("Task manager","COMMAND_TASK_MANAGER"),this._item("View source","COMMAND_TAB_VIEW_PAGE_SOURCE"),this._sep(),this._item("Help","COMMAND_SHOW_HELP"),this._item("Settings","COMMAND_SHOW_SETTINGS")]})]})}}const NW=(0,$i.Z)(kW,IW),ZW=Object.freeze'''
 
-SHOW_OLD = '_showMenu=e=>{const t=this.refButton.current?.getBoundingClientRect();'
-SHOW_NEW = '_showMenu=e=>{if(!this._getMenuItems(!0).length){this._pendingMenu=e;this._requestMenu();return}const t=this.refButton.current?.getBoundingClientRect();'
-EVENT_OLD = 'case"menu":this.hasMenu=!0,this._setupShortcuts(!1);break;case"shortcut":this._setupShortcuts(!1),this._setButtonKeyshortcut()'
-EVENT_NEW = 'case"menu":this.hasMenu=!0,this._setupShortcuts(!1);if(void 0!==this._pendingMenu&&this._getMenuItems(!0).length){const e=this._pendingMenu;this._pendingMenu=void 0;this._showMenu(e)}break;case"shortcut":this._setupShortcuts(!1),this._setButtonKeyshortcut()'
-
-POPUP_OLD = '_W.show(this.context,s.id,[s],"bottom",this._onMenuStateChange)'
-POPUP_INTERMEDIATE = '(0,Xs.Z)(this.context,n,e=>this._onMenuStateChange(e?0:-1),"bottomRight",this.refButton.current)()'
-POPUP_NEW = '(0,Xs.Z)(this.context,n,e=>this._onMenuStateChange(e?0:-1),"pointer")({clientX:t.right,clientY:t.bottom,nativeEvent:{},persist(){},preventDefault(){},stopPropagation(){}})'
+DOWNLOAD_STATE_OLD = 'state={downloadProgress:0,isPopupVisible:!1};'
+DOWNLOAD_STATE_NEW = 'state={downloadProgress:0,isPopupVisible:!1,showChromeButton:!1,hadActiveDownload:!1};hideChromeTimer=null;'
+DOWNLOAD_MOUNT_OLD = 'componentDidMount(){this.props.inEditor||(hy.ZP.addListener(this._onDownloadStoreChange),Ui.Z.addListener("COMMAND_SHOW_DOWNLOADS_POPOUT",this.onCommandSpy))}'
+DOWNLOAD_MOUNT_NEW = 'componentDidMount(){this.props.inEditor||(hy.ZP.addListener(this._onDownloadStoreChange),Ui.Z.addListener("COMMAND_SHOW_DOWNLOADS_POPOUT",this.onCommandSpy),globalThis.chrome?.downloads?.onCreated.addListener(this._onChromeDownloadCreated),globalThis.chrome?.downloads?.search({startedAfter:new Date(Date.now()-864e5).toISOString()},this._onRecentChromeDownloads))}'
+DOWNLOAD_UNMOUNT_OLD = 'componentWillUnmount(){this.props.inEditor||(hy.ZP.removeListener(this._onDownloadStoreChange),Ui.Z.removeListener("COMMAND_SHOW_DOWNLOADS_POPOUT",this.onCommandSpy))}'
+DOWNLOAD_UNMOUNT_NEW = 'componentWillUnmount(){this.hideChromeTimer&&clearTimeout(this.hideChromeTimer),this.props.inEditor||(hy.ZP.removeListener(this._onDownloadStoreChange),Ui.Z.removeListener("COMMAND_SHOW_DOWNLOADS_POPOUT",this.onCommandSpy),globalThis.chrome?.downloads?.onCreated.removeListener(this._onChromeDownloadCreated))}'
+DOWNLOAD_CHANGE_OLD = '_onDownloadStoreChange=()=>{this.setState({downloadProgress:hy.ZP.getTotalProgress()})};'
+DOWNLOAD_CHANGE_NEW = '_onRecentChromeDownloads=e=>{const t=Math.max(...(e||[]).map((e=>new Date(e.startTime).getTime())).filter(Number.isFinite)),n=t+864e5-Date.now();Number.isFinite(t)&&n>0&&(this.hideChromeTimer&&clearTimeout(this.hideChromeTimer),this.setState({showChromeButton:!0}),this.hideChromeTimer=setTimeout((()=>this.setState({showChromeButton:!1,hadActiveDownload:!1})),n))};_onChromeDownloadCreated=e=>{this._onRecentChromeDownloads([e])};_onDownloadStoreChange=()=>{const e=hy.ZP.getTotalProgress();e?(this.hideChromeTimer&&clearTimeout(this.hideChromeTimer),this.setState({downloadProgress:e,showChromeButton:!0,hadActiveDownload:!0})):this.state.hadActiveDownload?(this.setState({downloadProgress:0}),this.hideChromeTimer&&clearTimeout(this.hideChromeTimer),this.hideChromeTimer=setTimeout((()=>this.setState({showChromeButton:!1,hadActiveDownload:!1})),864e5)):this.setState({downloadProgress:0})};'
+DOWNLOAD_HIDDEN_OLD = 'isHidden:this.props.isHidden,children:(0,Hi.jsx)(mz'
+DOWNLOAD_HIDDEN_NEW = 'isHidden:this.props.isHidden||!this.state.showChromeButton,children:(0,Hi.jsx)(mz'
 
 def transform(source):
-    source = source.replace(POPUP_INTERMEDIATE, POPUP_OLD)
-    for old, new in [(OLD, NEW), (REQUEST_OLD, REQUEST_NEW), (SHOW_OLD, SHOW_NEW), (EVENT_OLD, EVENT_NEW), (POPUP_OLD, POPUP_NEW)]:
+    pairs = [
+        (OLD, NEW),
+        (CLASS_ANCHOR, CLASS_SOURCE),
+        (DOWNLOAD_STATE_OLD, DOWNLOAD_STATE_NEW),
+        (DOWNLOAD_MOUNT_OLD, DOWNLOAD_MOUNT_NEW),
+        (DOWNLOAD_UNMOUNT_OLD, DOWNLOAD_UNMOUNT_NEW),
+        (DOWNLOAD_CHANGE_OLD, DOWNLOAD_CHANGE_NEW),
+        (DOWNLOAD_HIDDEN_OLD, DOWNLOAD_HIDDEN_NEW),
+    ]
+    for old, new in pairs:
         if source.count(new) == 1:
             continue
         if source.count(old) != 1:
@@ -45,7 +55,7 @@ def main():
     backup_dir = Path.home() / 'Library/Application Support/noChrome/backups' / VERSION
     backup = backup_dir / 'bundle.js'
     if args.restore:
-        if source.count(NEW) != 1:
+        if source.count(NEW) != 1 or source.count(CLASS_SOURCE) != 1:
             raise ValueError('Installed resource is not the expected patched version.')
         original = backup.read_text()
         if transform(original) != source:
@@ -63,7 +73,7 @@ def main():
     if not backup.exists():
         shutil.copy2(resource, backup)
     resource.write_text(result)
-    print('Installed native menu component patch:', VERSION)
+    print('Installed Chrome-style toolbar menu patch:', VERSION)
     print('Original SHA256:', hashlib.sha256(backup.read_bytes()).hexdigest())
     print('Backup:', backup)
     print('Restart Vivaldi to load it.')
