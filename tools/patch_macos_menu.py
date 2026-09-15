@@ -45,6 +45,8 @@ TAB_CLOSE_ANIMATION_OLD = 'this.setState({animate:!1},(()=>{this.props.closePage
 TAB_CLOSE_ANIMATION_NEW = 'this.setState({animate:!0},(()=>{this.props.closePage(i)}))'
 TAB_CLOSE_FREEZE_OLD = '!e.pinned&&this.props.prefValues[P.kTabsAlignNext]&&e.id!==this.props.tabs.last()?.id&&this.freezeTabSize(e)'
 TAB_CLOSE_FREEZE_NEW = '!e.pinned&&e.id!==this.props.tabs.last()?.id&&this.freezeTabSize(e)'
+TAB_CLOSE_TOOLTIP_OLD = 'onMouseDown:i,title:a})'
+TAB_CLOSE_TOOLTIP_NEW = 'onMouseDown:i,"aria-label":a})'
 
 def transform(source):
     # Migrate bundles patched by an earlier port revision before applying the
@@ -68,6 +70,7 @@ def transform(source):
         (TAB_COLLAPSE_OLD, TAB_COLLAPSE_NEW),
         (TAB_CLOSE_ANIMATION_OLD, TAB_CLOSE_ANIMATION_NEW),
         (TAB_CLOSE_FREEZE_OLD, TAB_CLOSE_FREEZE_NEW),
+        (TAB_CLOSE_TOOLTIP_OLD, TAB_CLOSE_TOOLTIP_NEW),
     ]
     for old, new in pairs:
         if source.count(new) == 1:
