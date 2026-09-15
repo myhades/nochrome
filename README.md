@@ -24,19 +24,21 @@ Recommended native layout: top tabs and address bar, Regular density, 100% UI zo
 - Light/dark Chrome-like palettes, a capsule address field and round toolbar buttons.
 - Upstream navigation and extension SVG icons packaged into both themes.
 - Current `.tab-wrapper` structure and macOS window controls supported.
-- Ordinary top tabs use a 233px flex layout; stacked, pinned and scrolling rows retain native positioning.
+- Ordinary top tabs use Chromium-derived 240/56/32px maximum, active-minimum and inactive-minimum widths; stacked and pinned rows retain native positioning.
 - Explicit row height keeps the toolbar from covering the selected tab’s curved feet.
 - Reading List, download and extension controls share 20px icon canvases; the new-tab plus uses its own Chrome-sized canvas.
 - The native new-tab button is anchored to the last tab using CSS anchor positioning.
-- The bookmark row is 40px, slightly shorter than the 44px navigation row, with a one-pixel lower boundary.
+- The bookmark row is 34px, shorter than the 44px navigation row, with a one-pixel lower boundary.
 - Toolbar and bookmark separators are short round-ended capsules. Tab separators are thinner and taller; those beside an active or hovered tab disappear immediately and fade back with the hover.
 - Active-tab corners change immediately, while inactive-tab hover color fades in and out.
+- Tab insertion/removal uses Chromium's 18px overlap endpoint and a monotonic 200ms-style spring; closing a middle tab freezes the remaining widths until the pointer leaves the strip.
+- Hover cards use Chromium's dynamic 300–1300ms delay, 256px width, 16:9 preview and a separate memory/hibernation footer.
 - Vivaldi’s segmented loading spinner is replaced with a continuously rotating, sweep-eased ring based on Chromium’s desktop throbber behavior.
 - The omnibox popup follows Chrome’s integrated rounded panel, row height, selection pill, text sizing and title/URL contrast.
 - Generic profiles use Chromium’s outlined account-circle icon; real profile avatars are reduced to 80% of their former size.
 - Broad rules that hid security text, toolbar children and permission UI removed.
 - Local CSS/SVG assets with no network requests at runtime.
-- The optional macOS patch adds an independent Chrome-shaped toolbar menu, preserves the native macOS menu bar, and makes the download control follow recent download activity.
+- The optional macOS patch adds an independent Chrome-shaped toolbar menu, preserves the native macOS menu bar, and keeps the download control visible for active transfers and for 60 minutes after completion.
 
 ## Verification and limits
 
@@ -58,7 +60,7 @@ The original stylesheet is preserved in `legacy/nochrome-v2.css`; keep it outsid
 
 ## 8.2 geometry correction
 
-The second pass fixes the first port's covered tab feet: the parent row now has a 34px content height plus 6px top padding, followed by a 44px toolbar and a 34px omnibox. Plain tabs use a 233px maximum width and 20px navigation SVG canvases. The tab search button sits before the tabs. The new-tab button follows the last tab through CSS anchor positioning; its containing toolbar must not establish a separate positioning context.
+The second pass fixes the first port's covered tab feet: the parent row now has a 34px content height plus 6px top padding, followed by a 44px toolbar and a 34px omnibox. Plain tabs use a 240px maximum width and 20px navigation SVG canvases. The tab search button sits before the tabs. The new-tab button follows the last tab through CSS anchor positioning; its containing toolbar must not establish a separate positioning context.
 
 The flex width override is gated on an existing `.tab-position`. This is required for the native initial measurement to run during session restoration; applying it to an empty row prevents tabs from appearing until an interaction.
 

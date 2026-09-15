@@ -19,15 +19,15 @@ CLASS_SOURCE = '''class ncChromeMenu extends Wi.PureComponent{static contextType
 DOWNLOAD_STATE_OLD = 'state={downloadProgress:0,isPopupVisible:!1};'
 DOWNLOAD_STATE_NEW = 'state={downloadProgress:0,isPopupVisible:!1,showChromeButton:!1,hadActiveDownload:!1};hideChromeTimer=null;'
 DOWNLOAD_MOUNT_OLD = 'componentDidMount(){this.props.inEditor||(hy.ZP.addListener(this._onDownloadStoreChange),Ui.Z.addListener("COMMAND_SHOW_DOWNLOADS_POPOUT",this.onCommandSpy))}'
-DOWNLOAD_MOUNT_NEW = 'componentDidMount(){this.props.inEditor||(hy.ZP.addListener(this._onDownloadStoreChange),Ui.Z.addListener("COMMAND_SHOW_DOWNLOADS_POPOUT",this.onCommandSpy),globalThis.chrome?.downloads?.onCreated.addListener(this._onChromeDownloadCreated),globalThis.chrome?.downloads?.search({startedAfter:new Date(Date.now()-864e5).toISOString()},this._onRecentChromeDownloads))}'
+DOWNLOAD_MOUNT_NEW = 'componentDidMount(){this.props.inEditor||(hy.ZP.addListener(this._onDownloadStoreChange),Ui.Z.addListener("COMMAND_SHOW_DOWNLOADS_POPOUT",this.onCommandSpy),globalThis.chrome?.downloads?.onCreated.addListener(this._onChromeDownloadCreated),globalThis.chrome?.downloads?.onChanged.addListener(this._onChromeDownloadChanged),this._refreshChromeDownloads())}'
 DOWNLOAD_UNMOUNT_OLD = 'componentWillUnmount(){this.props.inEditor||(hy.ZP.removeListener(this._onDownloadStoreChange),Ui.Z.removeListener("COMMAND_SHOW_DOWNLOADS_POPOUT",this.onCommandSpy))}'
-DOWNLOAD_UNMOUNT_NEW = 'componentWillUnmount(){this.hideChromeTimer&&clearTimeout(this.hideChromeTimer),this.props.inEditor||(hy.ZP.removeListener(this._onDownloadStoreChange),Ui.Z.removeListener("COMMAND_SHOW_DOWNLOADS_POPOUT",this.onCommandSpy),globalThis.chrome?.downloads?.onCreated.removeListener(this._onChromeDownloadCreated))}'
+DOWNLOAD_UNMOUNT_NEW = 'componentWillUnmount(){this.hideChromeTimer&&clearTimeout(this.hideChromeTimer),this.props.inEditor||(hy.ZP.removeListener(this._onDownloadStoreChange),Ui.Z.removeListener("COMMAND_SHOW_DOWNLOADS_POPOUT",this.onCommandSpy),globalThis.chrome?.downloads?.onCreated.removeListener(this._onChromeDownloadCreated),globalThis.chrome?.downloads?.onChanged.removeListener(this._onChromeDownloadChanged))}'
 DOWNLOAD_CHANGE_OLD = '_onDownloadStoreChange=()=>{this.setState({downloadProgress:hy.ZP.getTotalProgress()})};'
-DOWNLOAD_CHANGE_NEW = '_onRecentChromeDownloads=e=>{const t=Math.max(...(e||[]).map((e=>new Date(e.startTime).getTime())).filter(Number.isFinite)),n=t+864e5-Date.now();Number.isFinite(t)&&n>0&&(this.hideChromeTimer&&clearTimeout(this.hideChromeTimer),this.setState({showChromeButton:!0}),this.hideChromeTimer=setTimeout((()=>this.setState({showChromeButton:!1,hadActiveDownload:!1})),n))};_onChromeDownloadCreated=e=>{this._onRecentChromeDownloads([e])};_onDownloadStoreChange=()=>{const e=hy.ZP.getTotalProgress();e?(this.hideChromeTimer&&clearTimeout(this.hideChromeTimer),this.setState({downloadProgress:e,showChromeButton:!0,hadActiveDownload:!0})):this.state.hadActiveDownload?(this.setState({downloadProgress:0}),this.hideChromeTimer&&clearTimeout(this.hideChromeTimer),this.hideChromeTimer=setTimeout((()=>this.setState({showChromeButton:!1,hadActiveDownload:!1})),864e5)):this.setState({downloadProgress:0})};'
+DOWNLOAD_CHANGE_NEW = '_refreshChromeDownloads=()=>globalThis.chrome?.downloads?.search({limit:100,orderBy:["-startTime"]},this._onRecentChromeDownloads);_onRecentChromeDownloads=e=>{const t=(e||[]).some((e=>"in_progress"===e.state)),n=Math.max(...(e||[]).map((e=>new Date(e.endTime||0).getTime())).filter(Number.isFinite)),i=n+36e5-Date.now();this.hideChromeTimer&&clearTimeout(this.hideChromeTimer),t?this.setState({showChromeButton:!0,hadActiveDownload:!0}):Number.isFinite(n)&&i>0?(this.setState({showChromeButton:!0,hadActiveDownload:!1}),this.hideChromeTimer=setTimeout((()=>this.setState({showChromeButton:!1,hadActiveDownload:!1})),i)):this.setState({showChromeButton:!1,hadActiveDownload:!1})};_onChromeDownloadCreated=e=>{this.setState({showChromeButton:!0,hadActiveDownload:!0}),this._refreshChromeDownloads()};_onChromeDownloadChanged=e=>{this._refreshChromeDownloads()};_onDownloadStoreChange=()=>{const e=hy.ZP.getTotalProgress();e?(this.hideChromeTimer&&clearTimeout(this.hideChromeTimer),this.setState({downloadProgress:e,showChromeButton:!0,hadActiveDownload:!0})):this.setState({downloadProgress:0},this._refreshChromeDownloads)};'
 DOWNLOAD_HIDDEN_OLD = 'isHidden:this.props.isHidden,children:(0,Hi.jsx)(mz'
-DOWNLOAD_HIDDEN_NEW = 'isHidden:this.props.isHidden||!this.state.showChromeButton,children:(0,Hi.jsx)(mz'
+DOWNLOAD_HIDDEN_NEW = 'className:this.state.showChromeButton?"nc-download-visible":"nc-download-hidden",isHidden:this.props.isHidden,children:(0,Hi.jsx)(mz'
 TOOLTIP_DELAY_OLD = 'appearDelay:(0,rz.Yt)(this.props.prefValues[P.kAutoHideEnabled])&&this.props.prefValues[P.kAutoHideTabBar]?600:200'
-TOOLTIP_DELAY_NEW = 'appearDelay:1100'
+TOOLTIP_DELAY_NEW = 'appearDelay:e.style.width>=240?1300:Math.round(300+500*Math.log(Math.max(1,e.style.width-31))/Math.log(209))'
 TAB_SCROLL_OLD = 'isHorizontalScrollingEnabled=()=>this.props.prefValues[P.kTabsHorizontalScrolling]&&("top"===this.props.tabPosition||"bottom"===this.props.tabPosition)'
 TAB_SCROLL_NEW = 'isHorizontalScrollingEnabled=()=>!1'
 TAB_SCROLL_LAYOUT_OLD = 'const i=r[P.kTabsHorizontalScrolling];let s;return'
@@ -38,6 +38,12 @@ TAB_MIN_WIDTHS_OLD = 'minWidth:t||e||i?s:0,flexBasis:t?u:e?s:fAe'
 TAB_MIN_WIDTHS_NEW = 'minWidth:t?u:e?Math.max(s||0,56):32,flexBasis:t?u:e?Math.max(s||0,56):32'
 TAB_SPRING_OLD = 'OAe={stiffness:600,damping:36,precision:1}'
 TAB_SPRING_NEW = 'OAe={stiffness:600,damping:50,precision:1}'
+TAB_COLLAPSE_OLD = 'const t=e.map((e=>({...e,style:{...e.style,width:0}})));'
+TAB_COLLAPSE_NEW = 'const t=e.map((e=>({...e,style:{...e.style,width:18}})));'
+TAB_CLOSE_ANIMATION_OLD = 'this.setState({animate:!1},(()=>{this.props.closePage(i).then((()=>{this.allowDelayedAnimation()}))}))'
+TAB_CLOSE_ANIMATION_NEW = 'this.setState({animate:!0},(()=>{this.props.closePage(i)}))'
+TAB_CLOSE_FREEZE_OLD = '!e.pinned&&this.props.prefValues[P.kTabsAlignNext]&&e.id!==this.props.tabs.last()?.id&&this.freezeTabSize(e)'
+TAB_CLOSE_FREEZE_NEW = '!e.pinned&&e.id!==this.props.tabs.last()?.id&&this.freezeTabSize(e)'
 
 def transform(source):
     pairs = [
@@ -54,6 +60,9 @@ def transform(source):
         (TAB_WIDTHS_OLD, TAB_WIDTHS_NEW),
         (TAB_MIN_WIDTHS_OLD, TAB_MIN_WIDTHS_NEW),
         (TAB_SPRING_OLD, TAB_SPRING_NEW),
+        (TAB_COLLAPSE_OLD, TAB_COLLAPSE_NEW),
+        (TAB_CLOSE_ANIMATION_OLD, TAB_CLOSE_ANIMATION_NEW),
+        (TAB_CLOSE_FREEZE_OLD, TAB_CLOSE_FREEZE_NEW),
     ]
     for old, new in pairs:
         if source.count(new) == 1:

@@ -7,7 +7,7 @@
   --nc-ink: #1f1f1f;
   --nc-muted: #474747;
   --nc-disabled: #9f9f9f;
-  --nc-pressed: #d3e3fd;
+  --nc-pressed: #d7d7d7;
   --nc-field: #efeded;
   --nc-field-hover: #e1dfdf;
   --nc-hover: #c7c7c7;
@@ -27,9 +27,9 @@
   --nc-ink: #e3e3e3;
   --nc-muted: #c7c7c7;
   --nc-disabled: #7b7b7b;
-  --nc-pressed: #3f4f66;
+  --nc-pressed: #505050;
   --nc-field: #282828;
-  --nc-field-hover: #4b4b4b;
+  --nc-field-hover: #3e3e3e;
   --nc-hover: #474747;
   --nc-chip: #3c3c3c;
   --nc-control-hover: rgba(253,252,251,.102);
@@ -188,7 +188,7 @@
 #browser .toolbar-addressbar .UrlBar-AddressField {
   height: 34px !important;
   border: 0 !important;
-  border-radius: 20px !important;
+  border-radius: 17px !important;
   background: var(--nc-field) !important;
   color: var(--nc-ink) !important;
   margin: 0 5px;
@@ -205,8 +205,8 @@
 #browser .toolbar-addressbar #urlFieldInput { font-size: 14px !important; color: var(--nc-ink); }
 #browser .toolbar-addressbar > .button-toolbar > button,
 #browser .toolbar-addressbar .toolbar-extensions > .button-toolbar > button {
-  width: 32px;
-  min-width: 32px;
+  width: 34px;
+  min-width: 34px;
   height: 32px;
   min-height: 32px;
   border-radius: 50%;
@@ -220,7 +220,7 @@
   min-width: 28px !important;
   width: 28px !important;
   height: 28px !important;
-  margin-left: 2px;
+  margin-left: -1px;
   border-radius: 50%;
 }
 #browser .toolbar-addressbar .SiteInfoButton > button {
@@ -232,10 +232,15 @@
   border-radius: 50%;
   background: var(--nc-chip) !important;
 }
+#browser .toolbar-addressbar .SiteInfoButton :is(.button-icon,.button-icon svg) {
+  width: 16px !important;
+  height: 16px !important;
+  flex-basis: 16px;
+}
 #browser .toolbar-addressbar .SiteInfoButton > button:hover {
   background: color-mix(in srgb, var(--nc-ink) 10%, var(--nc-chip)) !important;
 }
-#browser .toolbar-addressbar .SiteInfoButton > button:is(
+#browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within) .SiteInfoButton > button:is(
   [title*="Not Secure" i],
   [title*="Certificate Error" i],
   [title*="Security Error" i],
@@ -244,13 +249,18 @@
   background: var(--nc-danger) !important;
   color: var(--nc-on-danger) !important;
 }
-#browser .toolbar-addressbar .SiteInfoButton > button:is(
+#browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within) .SiteInfoButton > button:is(
   [title*="Not Secure" i],
   [title*="Certificate Error" i],
   [title*="Security Error" i],
   [title*="Dangerous" i]
 ):hover {
   background: color-mix(in srgb, var(--nc-on-danger) 10%, var(--nc-danger)) !important;
+}
+#browser .toolbar-addressbar .UrlBar-AddressField:focus-within .SiteInfoButton > button,
+#browser .toolbar-addressbar .UrlBar-AddressField:has(.OmniDropdown) .SiteInfoButton > button {
+  background: transparent !important;
+  color: var(--nc-muted) !important;
 }
 /* Keep native security icons, origin text, permission chips, popup anchors,
  * extensions and password controls. No blanket .toolbar-small hiding. */
@@ -496,15 +506,15 @@
 }
 
 /* noChrome's original Chrome tune badge and password shape. */
-#browser .toolbar-addressbar .SiteInfoButton > button[title="Site info"] .button-icon svg {
+#browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within):not(:has(.OmniDropdown)) .SiteInfoButton > button[title="Site info"] .button-icon svg {
   width: 18px !important;
   height: 18px !important;
   overflow: visible !important;
 }
-#browser .toolbar-addressbar .SiteInfoButton > button[title="Site info"] .button-icon svg path:first-of-type {
+#browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within):not(:has(.OmniDropdown)) .SiteInfoButton > button[title="Site info"] .button-icon svg path:first-of-type {
   d: path("M12.096 14.2797q-1.1176 0-1.8894-.7717T9.4348 11.6186q0-1.1176.7717-1.8894T12.096 8.9574q1.1176 0 1.8894.7717t.7717 1.8894q0 1.1176-.7717 1.8894t-1.8894.7717Zm0-1.4193q.5145 0 .8782-.3636t.3636-.8782q0-.5145-.3636-.8782t-.8782-.3636q-.5145 0-.8782.3636t-.3636.8782q0 .5145.3636.8782t.8782.3636Zm-9.7574-.5322v-1.4193h5.6771v1.4193H2.3385Zm1.5967-4.4352q-1.1176 0-1.8894-.7717T1.2741 5.2319q0-1.1176.7717-1.8894t1.8894-.7717q1.1176 0 1.8894.7717t.7717 1.8894q0 1.1176-.7717 1.8894t-1.8894.7717Zm0-1.4193q.5145 0 .8782-.3636t.3636-.8782q0-.5145-.3636-.8782T3.9352 3.99q-.5145 0-.8782.3636t-.3636.8782q0 .5145.3636.8782t.8782.3636Zm4.0804-.5322v-1.4193h5.6771v1.4193H8.0156Z") !important;
 }
-#browser .toolbar-addressbar .SiteInfoButton > button[title="Site info"] .button-icon svg path:not(:first-of-type) { display: none !important; }
+#browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within):not(:has(.OmniDropdown)) .SiteInfoButton > button[title="Site info"] .button-icon svg path:not(:first-of-type) { display: none !important; }
 #browser .toolbar-addressbar .UrlFragments .UrlFragment--Lowlight {
   color: color-mix(in srgb, var(--nc-ink) 82%, var(--nc-field)) !important;
   opacity: 1 !important;
@@ -605,14 +615,14 @@
 
 /* Chrome uses short, round-ended separators instead of hairline SVG rules. */
 #browser .toolbar-addressbar .button-toolbar.toolbar-divider {
-  width: 12px !important;
-  min-width: 12px !important;
-  flex: 0 0 12px !important;
+  width: 8px !important;
+  min-width: 8px !important;
+  flex: 0 0 8px !important;
   position: relative;
 }
 #browser .toolbar-addressbar .button-toolbar.toolbar-divider > button {
-  width: 12px !important;
-  min-width: 12px !important;
+  width: 8px !important;
+  min-width: 8px !important;
   height: 32px !important;
   padding: 0 !important;
   position: relative;
@@ -623,12 +633,51 @@
 #browser .toolbar-addressbar .button-toolbar.toolbar-divider > button::after {
   content: "";
   position: absolute;
-  left: 5px;
+  left: 3px;
   top: 8px;
   width: 2px;
   height: 16px;
   border-radius: 999px;
   background: var(--nc-separator);
+}
+
+/* Chrome keeps the downloads action in the toolbar for one hour after the
+   latest completion. Collapse the action and its separator with the same
+   short toolbar motion instead of making them pop in and out. */
+#browser .toolbar-addressbar #downloads {
+  overflow: hidden !important;
+  transform-origin: center;
+  transition: width 200ms ease-out, min-width 200ms ease-out,
+              flex-basis 200ms ease-out, opacity 120ms linear,
+              transform 200ms ease-out !important;
+}
+#browser .toolbar-addressbar #downloads.nc-download-visible {
+  width: 34px !important;
+  min-width: 34px !important;
+  flex-basis: 34px !important;
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+#browser .toolbar-addressbar #downloads.nc-download-hidden {
+  width: 0 !important;
+  min-width: 0 !important;
+  flex-basis: 0 !important;
+  margin: 0 !important;
+  opacity: 0;
+  transform: scale(.72);
+  pointer-events: none;
+}
+#browser .toolbar-addressbar .button-toolbar.toolbar-divider:has(+ #downloads) {
+  transition: width 200ms ease-out, min-width 200ms ease-out,
+              flex-basis 200ms ease-out, opacity 120ms linear !important;
+}
+#browser .toolbar-addressbar .button-toolbar.toolbar-divider:has(+ #downloads.nc-download-hidden) {
+  width: 0 !important;
+  min-width: 0 !important;
+  flex-basis: 0 !important;
+  opacity: 0;
+  overflow: hidden;
 }
 
 /* Chrome-shaped omnibox popup, including its integrated input row. */
@@ -702,6 +751,98 @@
   border-radius: 0 4px 4px 0;
   background: var(--nc-focus);
 }
+
+/* Chromium 152 tab hover card: 256px content width, 16:9 preview, 12px
+   text insets, a separate resource footer and 200ms card-to-card motion. */
+#browser .tooltip:has(.thumbnail-caption) {
+  width: 256px !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  background: transparent !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,.28) !important;
+  overflow: visible !important;
+  transition: left 200ms ease-out, top 200ms ease-out !important;
+}
+#browser .tooltip:has(.thumbnail-caption) :is(.tab-solo,.tooltip-item) {
+  width: 256px !important;
+  max-width: 256px !important;
+}
+#browser .tooltip:has(.thumbnail-caption) .tooltip-item {
+  display: flex !important;
+  flex-direction: column !important;
+  height: auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  background: var(--nc-surface) !important;
+  color: var(--nc-ink) !important;
+  overflow: hidden !important;
+}
+#browser .tooltip:has(.thumbnail-caption) :is(.thumbnail-caption,.thumbnail-text) {
+  display: contents !important;
+}
+#browser .tooltip:has(.thumbnail-caption) .thumbnail-text > .title {
+  order: 0;
+  display: -webkit-box !important;
+  min-height: 18px;
+  padding: 12px 12px 0 !important;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 18px !important;
+  color: var(--nc-ink) !important;
+}
+#browser .tooltip:has(.thumbnail-caption) .thumbnail-text > .url {
+  order: 1;
+  min-height: 16px;
+  padding: 4px 12px 12px !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px !important;
+  line-height: 16px !important;
+  color: var(--nc-muted) !important;
+}
+#browser .tooltip:has(.thumbnail-caption) .thumbnail-image {
+  order: 2;
+  width: 256px !important;
+  height: 144px !important;
+  min-height: 144px !important;
+  max-height: 144px !important;
+  flex: 0 0 144px !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+  background: var(--nc-field) !important;
+}
+#browser .tooltip:has(.thumbnail-caption) .thumbnail-image > img {
+  width: 256px !important;
+  height: 144px !important;
+  object-fit: cover !important;
+}
+#browser .tooltip:has(.thumbnail-caption) .thumbnail-text > .info {
+  order: 3;
+  box-sizing: border-box;
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  width: 256px !important;
+  min-height: 40px;
+  padding: 0 12px !important;
+  font-size: 12px !important;
+  line-height: 16px !important;
+  color: var(--nc-muted) !important;
+  background: color-mix(in srgb, var(--nc-ink) 4%, var(--nc-surface)) !important;
+}
+#browser .tooltip:has(.thumbnail-caption) .thumbnail-text > .info svg {
+  width: 16px !important;
+  height: 16px !important;
+}
+#browser .tooltip:has(.thumbnail-caption) .thumbnail-buttons { order: 4; }
 
 /* Chromium paints a continuously rotating ring whose sweep eases in and out. */
 @property --nc-throbber-angle {
