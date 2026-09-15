@@ -205,9 +205,12 @@
   padding: 0 4px;
   box-shadow: none;
   outline: 0;
-  transition: background-color 200ms ease-in-out;
+  transition: none;
 }
-#browser .toolbar-addressbar .UrlBar-AddressField:hover:not(:focus-within) { background: var(--nc-field-hover) !important; }
+#browser .toolbar-addressbar .UrlBar-AddressField:hover:not(:focus-within) {
+  background: var(--nc-field-hover) !important;
+  transition: background-color 200ms ease-out;
+}
 #browser .toolbar-addressbar .UrlBar-AddressField:focus-within {
   background: var(--nc-surface) !important;
   outline: 0 !important;
@@ -480,8 +483,8 @@
   background: var(--nc-surface) !important;
   color: var(--nc-muted) !important;
   font-size: 13px !important;
-  height: 34px !important;
-  min-height: 34px !important;
+  height: 35px !important;
+  min-height: 35px !important;
   padding-block: 0 !important;
   border: 0 !important;
   border-bottom: 1px solid var(--nc-boundary) !important;
@@ -494,6 +497,7 @@
   align-items: center;
   padding-left: 6px !important;
   padding-right: 8px !important;
+  padding-bottom: 2px !important;
 }
 #browser .bookmark-bar .bookmarkbarItem {
   height: 28px !important;
@@ -570,9 +574,13 @@
   opacity: 0 !important;
   transition: none !important;
 }
-#browser.tabs-top #tabs-container.top .tab:not(.active) {
+#browser.tabs-top #tabs-container.top .tab-wrapper:not(.accordion,.group,.in-accordion) > .tab {
   left: 1px;
   width: calc(100% - 2px) !important;
+  max-width: calc(100% - 2px) !important;
+}
+#browser.tabs-top #tabs-container.top .tab:not(.active, .pinned) .tab-header::after {
+  right: -2px;
 }
 #browser.tabs-top #tabs-container.top .toolbar-tabbar-after .button-toolbar.newtab { left: calc(anchor(right) + 3px); }
 #browser#browser.tabs-top .newtab .button-icon {
