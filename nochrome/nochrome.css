@@ -104,10 +104,10 @@
   content: "";
   position: absolute;
   z-index: 0;
-  left: 1.5px;
-  right: 1.5px;
+  left: 2.5px;
+  right: 2.5px;
   top: 0;
-  bottom: 4px;
+  bottom: 5px;
   border-radius: 8px;
   background: var(--nc-hover);
   opacity: 0;
@@ -599,9 +599,9 @@
   transition: none !important;
 }
 #browser.tabs-top #tabs-container.top .tab-wrapper:not(.accordion,.group,.in-accordion) > .tab {
-  left: 1.5px;
-  width: calc(100% - 3px) !important;
-  max-width: calc(100% - 3px) !important;
+  left: 2.5px;
+  width: calc(100% - 5px) !important;
+  max-width: calc(100% - 5px) !important;
 }
 #browser.tabs-top #tabs-container.top .tab:not(.active, .pinned) .tab-header::after {
   right: 0;
