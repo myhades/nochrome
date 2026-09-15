@@ -148,12 +148,12 @@
 }
 #browser.tabs-top #tabs-container.top .tab .close {
   border-radius: 50%;
-  width: 17px;
-  min-width: 17px;
-  height: 17px;
-  min-height: 17px;
+  width: 16px;
+  min-width: 16px;
+  height: 16px;
+  min-height: 16px;
   margin-right: 0;
-  transform: translate(-3px, 1px);
+  transform: translateX(-3px);
   color: var(--nc-tab-ink) !important;
   display: grid !important;
   place-items: center;
@@ -615,10 +615,10 @@
 #browser#browser.tabs-top .newtab .button-icon {
   position: relative;
   z-index: 1;
-  width: 17px !important;
-  height: 17px !important;
-  flex-basis: 17px;
-  mask-size: 17px 17px;
+  width: 19px !important;
+  height: 19px !important;
+  flex-basis: 19px;
+  mask-size: 19px 19px;
 }
 #browser#browser.tabs-top .toolbar-tabbar-after .button-toolbar.newtab > button {
   position: relative;
