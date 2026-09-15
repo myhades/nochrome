@@ -108,7 +108,7 @@
   right: 2.5px;
   top: 0;
   bottom: 5px;
-  border-radius: 8px;
+  border-radius: 10px;
   background: var(--nc-hover);
   opacity: 0;
   pointer-events: none;
