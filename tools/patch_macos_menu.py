@@ -40,11 +40,10 @@ TAB_SPRING_OLD = 'OAe={stiffness:600,damping:36,precision:1}'
 TAB_SPRING_PRIOR = 'OAe={stiffness:600,damping:50,precision:1}'
 TAB_SPRING_PORT_V1 = 'OAe={stiffness:1200,damping:70,precision:1}'
 TAB_SPRING_PORT_V2 = 'OAe={stiffness:1000,damping:63,precision:2}'
-TAB_SPRING_NEW = 'OAe={stiffness:-1,damping:200,precision:.01}'
+TAB_LINEAR_PORT_V1 = 'OAe={stiffness:-1,damping:200,precision:.01}'
+TAB_SPRING_NEW = 'OAe={stiffness:-1,damping:150,precision:.01}'
 SPRING_INTEGRATOR_OLD = 'function tP(e,t,n,i,s,a,o){const r=n+(-s*(t-i)+-a*n)*e,l=t+r*e;return Math.abs(r)<o&&Math.abs(l-i)<o?(eP[0]=i,eP[1]=0,eP):(eP[0]=l,eP[1]=r,eP)}'
 SPRING_INTEGRATOR_NEW = 'function tP(e,t,n,i,s,a,o){if(-1===s){(0===n||n*(i-t)<=0)&&(n=(i-t)/(a/1e3));const s=t+n*e;return n>0&&s>=i||n<0&&s<=i||Math.abs(s-i)<o?(eP[0]=i,eP[1]=0,eP):(eP[0]=s,eP[1]=n,eP)}const r=n+(-s*(t-i)+-a*n)*e,l=t+r*e;return Math.abs(r)<o&&Math.abs(l-i)<o?(eP[0]=i,eP[1]=0,eP):(eP[0]=l,eP[1]=r,eP)}'
-TAB_COLLAPSE_OLD = 'const t=e.map((e=>({...e,style:{...e.style,width:0}})));'
-TAB_COLLAPSE_NEW = 'const t=e.map((e=>({...e,style:{...e.style,width:18}})));'
 TAB_CLOSE_ANIMATION_OLD = 'this.setState({animate:!1},(()=>{this.props.closePage(i).then((()=>{this.allowDelayedAnimation()}))}))'
 TAB_CLOSE_ANIMATION_NEW = 'this.setState({animate:!0},(()=>{this.props.closePage(i)}))'
 TAB_CLOSE_FREEZE_OLD = '!e.pinned&&this.props.prefValues[P.kTabsAlignNext]&&e.id!==this.props.tabs.last()?.id&&this.freezeTabSize(e)'
@@ -55,13 +54,25 @@ TAB_LEAVE_METHOD_OLD = 'getStyles=()=>{const{tabs:e,maxWidth:t,maxHeight:n}=this
 TAB_LEAVE_METHOD_NEW = 'getLeaveStyle=e=>this.#Hn&&"tab"===e.data?.type?{...e.style,width:VP(18,OAe)}:null;getStyles=()=>{const{tabs:e,maxWidth:t,maxHeight:n}=this.props'
 TAB_LEAVE_RENDER_OLD = '(0,Hi.jsx)(oAe,{styles:t,children:e=>this.#ei(e,s,a,n)})'
 TAB_LEAVE_RENDER_NEW = '(0,Hi.jsx)(oAe,{styles:t,willLeave:this.getLeaveStyle,children:e=>this.#ei(e,s,a,n)})'
+TAB_LAYOUT_RESERVE_OLD = 'const o=this.createFlexBoxLayout(e,t,n,{pageIdsHiddenForDrag:'
+TAB_LAYOUT_RESERVE_NEW = 'const o=this.createFlexBoxLayout(e,this.#Hn?Math.max(0,t-20):t,n,{pageIdsHiddenForDrag:'
+TAB_OPEN_GEOMETRY_OLD = 'this.context.requestAnimationFrame((()=>{this.#f&&this.forceUpdate()})),this.#Un=e.map((e=>e.key));const t=e.map((e=>({...e,style:{...e.style,width:0}})));return this.#Fn=r,[...s,...t]'
+TAB_OPEN_GEOMETRY_PORT_V1 = 'this.context.requestAnimationFrame((()=>{this.#f&&this.forceUpdate()})),this.#Un=e.map((e=>e.key));const t=e.map((e=>({...e,style:{...e.style,width:18}})));return this.#Fn=r,[...s,...t]'
+TAB_OPEN_GEOMETRY_BAD = 'this.context.requestAnimationFrame((()=>{this.#f&&this.forceUpdate()})),const t=Math.max(0,...s.filter((e=>"tab"===e.data?.type)).map((e=>vAe(e.style.x)+vAe(e.style.width))));this.#Un=e.map((e=>e.key));const n=e.map((e=>({...e,style:{...e.style,x:Math.max(vAe(e.style.x),t-18),width:18}})));return this.#Fn=r,[...s,...n]'
+TAB_OPEN_GEOMETRY_NEW = 'this.context.requestAnimationFrame((()=>{this.#f&&this.forceUpdate()}));const t=Math.max(0,...s.filter((e=>"tab"===e.data?.type)).map((e=>vAe(e.style.x)+vAe(e.style.width))));this.#Un=e.map((e=>e.key));const n=e.map((e=>({...e,style:{...e.style,x:Math.max(vAe(e.style.x),t-18),width:18}})));return this.#Fn=r,[...s,...n]'
+TAB_OPEN_SECOND_FRAME_OLD = 'if(this.#Hn&&this.#Un.length){const e=this.#Un;this.#Un=[];const t=r.map((t=>e.includes(t.key)?{...t,style:{...t.style,x:vAe(t.style.x)}}:t));return this.#Fn=t,t}'
+TAB_OPEN_SECOND_FRAME_NEW = 'if(this.#Hn&&this.#Un.length)return this.#Un=[],this.#Fn=r,r;'
 
 def transform(source):
     # Migrate bundles patched by an earlier port revision before applying the
     # reviewed original-to-current substitutions below.
-    for prior_spring in (TAB_SPRING_PRIOR, TAB_SPRING_PORT_V1, TAB_SPRING_PORT_V2):
+    for prior_spring in (TAB_SPRING_PRIOR, TAB_SPRING_PORT_V1, TAB_SPRING_PORT_V2, TAB_LINEAR_PORT_V1):
         if source.count(prior_spring) == 1 and source.count(TAB_SPRING_NEW) == 0:
             source = source.replace(prior_spring, TAB_SPRING_NEW, 1)
+    if source.count(TAB_OPEN_GEOMETRY_BAD) == 1 and source.count(TAB_OPEN_GEOMETRY_NEW) == 0:
+        source = source.replace(TAB_OPEN_GEOMETRY_BAD, TAB_OPEN_GEOMETRY_NEW, 1)
+    if source.count(TAB_OPEN_GEOMETRY_PORT_V1) == 1 and source.count(TAB_OPEN_GEOMETRY_NEW) == 0:
+        source = source.replace(TAB_OPEN_GEOMETRY_PORT_V1, TAB_OPEN_GEOMETRY_NEW, 1)
     pairs = [
         (OLD, NEW),
         (CLASS_ANCHOR, CLASS_SOURCE),
@@ -77,12 +88,14 @@ def transform(source):
         (TAB_MIN_WIDTHS_OLD, TAB_MIN_WIDTHS_NEW),
         (SPRING_INTEGRATOR_OLD, SPRING_INTEGRATOR_NEW),
         (TAB_SPRING_OLD, TAB_SPRING_NEW),
-        (TAB_COLLAPSE_OLD, TAB_COLLAPSE_NEW),
         (TAB_CLOSE_ANIMATION_OLD, TAB_CLOSE_ANIMATION_NEW),
         (TAB_CLOSE_FREEZE_OLD, TAB_CLOSE_FREEZE_NEW),
         (TAB_CLOSE_TOOLTIP_OLD, TAB_CLOSE_TOOLTIP_NEW),
         (TAB_LEAVE_METHOD_OLD, TAB_LEAVE_METHOD_NEW),
         (TAB_LEAVE_RENDER_OLD, TAB_LEAVE_RENDER_NEW),
+        (TAB_LAYOUT_RESERVE_OLD, TAB_LAYOUT_RESERVE_NEW),
+        (TAB_OPEN_GEOMETRY_OLD, TAB_OPEN_GEOMETRY_NEW),
+        (TAB_OPEN_SECOND_FRAME_OLD, TAB_OPEN_SECOND_FRAME_NEW),
     ]
     for old, new in pairs:
         if source.count(new) == 1:
