@@ -29,8 +29,8 @@
   --nc-surface: var(--colorBg);
   --nc-ink: var(--colorFg);
 }
-/* Preserve JS-computed widths/transforms: overflowing, pinned, dragged and
- * stacked tabs must keep their real hitboxes. Only top tabs are restyled. */
+/* Top-tab styling. Plain rows receive the flex layout below; complex
+ * native rows retain their own positioning. */
 #browser.tabs-top:not(.is-settingspage, .popup) #header,
 #browser.tabs-top .tabbar-wrapper,
 #browser.tabs-top #tabs-tabbar-container.top {
@@ -38,7 +38,9 @@
   color: var(--nc-ink);
 }
 #browser.tabs-top #tabs-tabbar-container.top {
-  padding-top: 8px !important;
+  padding-top: 6px !important;
+  height: 34px !important;
+  min-height: 34px !important;
   padding-bottom: 0 !important;
   --currentRadius: 10px;
 }
@@ -132,7 +134,7 @@
 }
 #browser.tabs-top #tabs-container.top .tab-wrapper:hover .tab-header::after,
 #browser.tabs-top #tabs-container.top .tab-position:has(+ .tab-position .tab.active) .tab-header::after { opacity: 0; }
-#browser.tabs-top #tabs-container.top .toolbar-tabbar .button-toolbar > button {
+#browser.tabs-top #tabs-container.top :is(.toolbar-tabbar-before, .toolbar-tabbar-after) .button-toolbar > button {
   height: 28px;
   min-height: 28px;
   width: 28px;
@@ -140,7 +142,7 @@
   border-radius: 50%;
   color: var(--nc-muted);
 }
-#browser.tabs-top #tabs-container.top .toolbar-tabbar .button-toolbar > button:hover { background: var(--nc-hover); }
+#browser.tabs-top #tabs-container.top :is(.toolbar-tabbar-before, .toolbar-tabbar-after) .button-toolbar > button:hover { background: var(--nc-hover); }
 /* Keep macOS native traffic lights and window dragging. */
 #browser.mac.tabs-top:not(.fullscreen, .native) #tabs-container.top .window-buttongroup {
   margin-left: 13px !important;
@@ -148,7 +150,7 @@
   margin-top: 7px !important;
   align-self: flex-start;
 }
-/* 46px toolbar, 34px omnibox, 32px round buttons. */
+/* 44px toolbar, 34px omnibox, round button targets. */
 #browser:not(.is-settingspage, .popup).address-top .mainbar {
   background: var(--nc-surface) !important;
   color: var(--nc-ink) !important;
@@ -156,9 +158,9 @@
   border-bottom: 1px solid color-mix(in srgb, var(--nc-ink) 12%, transparent);
 }
 #browser:not(.is-settingspage, .popup).address-top .mainbar .toolbar-addressbar.toolbar-visible {
-  height: 46px !important;
+  height: 44px !important;
   padding: 0 6px;
-  gap: 2px;
+  gap: 0;
 }
 #browser .toolbar-addressbar .UrlBar-AddressField {
   height: 34px !important;
@@ -166,7 +168,7 @@
   border-radius: 20px !important;
   background: var(--nc-field) !important;
   color: var(--nc-ink) !important;
-  margin: 0 6px;
+  margin: 0 5px;
   padding: 0 4px;
   box-shadow: none;
   outline: 0;
@@ -197,3 +199,114 @@
 @media (prefers-reduced-motion: reduce) {
   #browser.tabs-top #tabs-container.top .tab { transition: none; }
 }
+
+/* Vivaldi 8.2 measures its tab row at 30px even when the child is 34px.
+   The explicit 34px content + 6px padding row above prevents the toolbar from covering the feet. */
+#browser.tabs-top #tabs-container.top .tab.active {
+  corner-shape: round !important;
+}
+#browser.tabs-top #tabs-container.top .tab.active::before,
+#browser.tabs-top #tabs-container.top .tab.active::after {
+  border-radius: 0 !important;
+  corner-shape: round !important;
+}
+/* The theme SVG occupies a 24-unit canvas; Vivaldi's toolbar-large enlarges
+   it to 28px. Chrome's glyph canvas here is 20px inside a 34px target. */
+#browser .toolbar-addressbar .button-toolbar > button .button-icon,
+#browser .toolbar-addressbar .button-toolbar > button .button-icon svg,
+#browser .toolbar-addressbar .button-toolbar > button > svg,
+#browser .toolbar-addressbar .button-toolbar > button > img {
+  width: 20px !important;
+  height: 20px !important;
+  flex: 0 0 20px;
+}
+#browser .toolbar-addressbar > .button-toolbar > button {
+  width: 34px;
+  min-width: 34px;
+  padding: 0;
+}
+#browser.tabs-top :is(.toolbar-tabbar-before, .toolbar-tabbar-after) .button-icon,
+#browser.tabs-top :is(.toolbar-tabbar-before, .toolbar-tabbar-after) .button-icon svg {
+  width: 20px !important;
+  height: 20px !important;
+}
+#browser.tabs-top .toolbar-tabbar-before { margin-right: 8px; }
+#browser.tabs-top .toolbar-tabbar-before .button-toolbar > button {
+  width: 28px; min-width: 28px; height: 28px; min-height: 28px;
+  border-radius: 8px; background: var(--nc-surface); margin-top: 0;
+}
+#browser.tabs-top .tab .favicon { filter: none !important; }
+#browser.tabs-top .tab .close { background: transparent; }
+/* For ordinary top tabs use a 240px flex row, matching Chrome's desktop
+   default. Complex native stacks/scrolling keep their own layout. */
+#browser.tabs-top #tabs-container.top:not(:has(.tab-group-indicator,.tab-wrapper.group,.tab-wrapper.accordion,.is-pinned,.tab-yield-space,.tab-acceptsdrop)) .resize:has(.tab-strip:not(.horizontal-scrolling)):has(.tab-position) {
+  max-width: none !important;
+  flex: 0 1 auto;
+}
+#browser.tabs-top #tabs-container.top:not(:has(.tab-group-indicator,.tab-wrapper.group,.tab-wrapper.accordion,.is-pinned,.tab-yield-space,.tab-acceptsdrop)) .tab-strip:not(.horizontal-scrolling) {
+  display: flex;
+}
+#browser.tabs-top #tabs-container.top:not(:has(.tab-group-indicator,.tab-wrapper.group,.tab-wrapper.accordion,.is-pinned,.tab-yield-space,.tab-acceptsdrop)) .tab-strip:not(.horizontal-scrolling) .tab-position {
+  position: relative;
+  transform: none;
+  width: 240px;
+  flex: 0 1 240px;
+  min-width: 36px;
+}
+#browser.tabs-top #tabs-container.top .tab-wrapper { margin-right: 0; }
+
+#browser.tabs-top #tabs-container.top .tab-wrapper { width: 100%; }
+#browser.tabs-top :is(.toolbar-tabbar-before,.toolbar-tabbar-after) {
+  height: 34px;
+  align-self: flex-start;
+  align-items: flex-start;
+  padding-top: 0;
+}
+#browser.tabs-top .toolbar-tabbar-before { margin-left: 12px; }
+#browser.tabs-top .toolbar-tabbar-after .button-toolbar > button {
+  height: 28px; min-height: 28px; width: 28px; min-width: 28px;
+  border-radius: 50%;
+}
+#browser.tabs-top #tabs-container.top .tab-wrapper:not(.accordion,.group,.in-accordion) > .tab {
+  max-width: 100% !important;
+  width: 100%;
+}
+#browser .toolbar-addressbar .UrlBar-AddressField { margin-left: 3px; }
+/* The native virtualizer needs a non-zero available width at startup. */
+#browser.tabs-top #tabs-container.top:not(:has(.tab-group-indicator,.tab-wrapper.group,.tab-wrapper.accordion,.is-pinned,.tab-yield-space,.tab-acceptsdrop)) .resize:has(.tab-strip:not(.horizontal-scrolling)):has(.tab-position) {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+}
+#browser.tabs-top #tabs-container.top .tab-strip:not(.horizontal-scrolling) > span > .tab-position:last-child {
+  anchor-name: --nc-last-tab;
+}
+#browser.tabs-top #tabs-container.top:not(:has(.tab-group-indicator,.tab-wrapper.group,.tab-wrapper.accordion,.is-pinned,.tab-yield-space,.tab-acceptsdrop)) .toolbar-tabbar-after {
+  flex: 0 0 36px;
+}
+#browser.tabs-top #tabs-container.top:not(:has(.tab-group-indicator,.tab-wrapper.group,.tab-wrapper.accordion,.is-pinned,.tab-yield-space,.tab-acceptsdrop)) .toolbar-tabbar-after .button-toolbar.newtab {
+  position: absolute;
+  position-anchor: --nc-last-tab;
+  left: calc(anchor(right) + 4px);
+  top: 6px;
+}
+/* Use a single Chrome-like chevron, keeping the real TabButton hit target. */
+#browser.tabs-top .toolbar-tabbar-before [data-name="TabButton"] {
+  border: 0 !important;
+  box-shadow: none !important;
+  position: relative;
+}
+#browser.tabs-top .toolbar-tabbar-before [data-name="TabButton"] .button-icon { visibility: hidden; }
+#browser.tabs-top .toolbar-tabbar-before [data-name="TabButton"]::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid var(--nc-ink);
+  border-bottom: 1.5px solid var(--nc-ink);
+  transform: translateY(-2px) rotate(45deg);
+  pointer-events: none;
+}
+
+#browser.tabs-top .toolbar-tabbar-before .button-toolbar > button { border-radius: 8px !important; }
+#browser.tabs-top #tabs-container.top .toolbar-tabbar-after { position: static !important; }
