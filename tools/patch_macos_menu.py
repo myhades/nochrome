@@ -39,7 +39,10 @@ TAB_MIN_WIDTHS_NEW = 'minWidth:t?u:e?Math.max(s||0,56):32,flexBasis:t?u:e?Math.m
 TAB_SPRING_OLD = 'OAe={stiffness:600,damping:36,precision:1}'
 TAB_SPRING_PRIOR = 'OAe={stiffness:600,damping:50,precision:1}'
 TAB_SPRING_PORT_V1 = 'OAe={stiffness:1200,damping:70,precision:1}'
-TAB_SPRING_NEW = 'OAe={stiffness:1000,damping:63,precision:2}'
+TAB_SPRING_PORT_V2 = 'OAe={stiffness:1000,damping:63,precision:2}'
+TAB_SPRING_NEW = 'OAe={stiffness:-1,damping:200,precision:.01}'
+SPRING_INTEGRATOR_OLD = 'function tP(e,t,n,i,s,a,o){const r=n+(-s*(t-i)+-a*n)*e,l=t+r*e;return Math.abs(r)<o&&Math.abs(l-i)<o?(eP[0]=i,eP[1]=0,eP):(eP[0]=l,eP[1]=r,eP)}'
+SPRING_INTEGRATOR_NEW = 'function tP(e,t,n,i,s,a,o){if(-1===s){(0===n||n*(i-t)<=0)&&(n=(i-t)/(a/1e3));const s=t+n*e;return n>0&&s>=i||n<0&&s<=i||Math.abs(s-i)<o?(eP[0]=i,eP[1]=0,eP):(eP[0]=s,eP[1]=n,eP)}const r=n+(-s*(t-i)+-a*n)*e,l=t+r*e;return Math.abs(r)<o&&Math.abs(l-i)<o?(eP[0]=i,eP[1]=0,eP):(eP[0]=l,eP[1]=r,eP)}'
 TAB_COLLAPSE_OLD = 'const t=e.map((e=>({...e,style:{...e.style,width:0}})));'
 TAB_COLLAPSE_NEW = 'const t=e.map((e=>({...e,style:{...e.style,width:18}})));'
 TAB_CLOSE_ANIMATION_OLD = 'this.setState({animate:!1},(()=>{this.props.closePage(i).then((()=>{this.allowDelayedAnimation()}))}))'
@@ -52,7 +55,7 @@ TAB_CLOSE_TOOLTIP_NEW = 'onMouseDown:i,"aria-label":a})'
 def transform(source):
     # Migrate bundles patched by an earlier port revision before applying the
     # reviewed original-to-current substitutions below.
-    for prior_spring in (TAB_SPRING_PRIOR, TAB_SPRING_PORT_V1):
+    for prior_spring in (TAB_SPRING_PRIOR, TAB_SPRING_PORT_V1, TAB_SPRING_PORT_V2):
         if source.count(prior_spring) == 1 and source.count(TAB_SPRING_NEW) == 0:
             source = source.replace(prior_spring, TAB_SPRING_NEW, 1)
     pairs = [
@@ -68,6 +71,7 @@ def transform(source):
         (TAB_SCROLL_LAYOUT_OLD, TAB_SCROLL_LAYOUT_NEW),
         (TAB_WIDTHS_OLD, TAB_WIDTHS_NEW),
         (TAB_MIN_WIDTHS_OLD, TAB_MIN_WIDTHS_NEW),
+        (SPRING_INTEGRATOR_OLD, SPRING_INTEGRATOR_NEW),
         (TAB_SPRING_OLD, TAB_SPRING_NEW),
         (TAB_COLLAPSE_OLD, TAB_COLLAPSE_NEW),
         (TAB_CLOSE_ANIMATION_OLD, TAB_CLOSE_ANIMATION_NEW),
