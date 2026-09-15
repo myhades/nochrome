@@ -44,7 +44,7 @@
   --nc-omnibox-solid-hover: #505050;
   --nc-separator: #5f6368;
   --nc-tab-separator: #3e3e3e;
-  --nc-tab-ink: #cdcdcd;
+  --nc-tab-ink: #e4e4e4;
   --nc-boundary: #494b4a;
   --nc-dropdown-highlight: #505050;
   --nc-link: #a8c7fa;
@@ -148,11 +148,15 @@
 }
 #browser.tabs-top #tabs-container.top .tab .close {
   border-radius: 50%;
-  width: 18px;
-  height: 18px;
+  width: 17px;
+  min-width: 17px;
+  height: 17px;
+  min-height: 17px;
   margin-right: 0;
   transform: translateX(-3px);
   color: var(--nc-tab-ink) !important;
+  display: grid !important;
+  place-items: center;
 }
 #browser.tabs-top #tabs-container.top .tab .close:hover {
   background: color-mix(in srgb, var(--nc-ink) 15%, transparent);
@@ -368,7 +372,7 @@
   width: 20px !important;
   height: 20px !important;
 }
-#browser.tabs-top .toolbar-tabbar-before { margin-right: 8px; }
+#browser.tabs-top .toolbar-tabbar-before { margin-right: 5px; }
 #browser.tabs-top .toolbar-tabbar-before .button-toolbar > button {
   width: 28px; min-width: 28px; height: 28px; min-height: 28px;
   border-radius: 8px; background: var(--nc-surface); margin-top: 0;
@@ -608,13 +612,33 @@
 }
 #browser.tabs-top #tabs-container.top .toolbar-tabbar-after .button-toolbar.newtab { left: calc(anchor(right) + 3px); }
 #browser#browser.tabs-top .newtab .button-icon {
-  width: 15px !important;
-  height: 15px !important;
-  flex-basis: 15px;
-  mask-size: 15px 15px;
+  position: relative;
+  z-index: 1;
+  width: 17px !important;
+  height: 17px !important;
+  flex-basis: 17px;
+  mask-size: 17px 17px;
 }
 #browser#browser.tabs-top .toolbar-tabbar-after .button-toolbar.newtab > button {
-  color: var(--nc-tab-ink) !important;
+  position: relative;
+  isolation: isolate;
+  color: #c7c7c7 !important;
+  background: transparent !important;
+}
+#browser#browser.tabs-top .toolbar-tabbar-after .button-toolbar.newtab > button::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--nc-hover);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease-in;
+}
+#browser#browser.tabs-top .toolbar-tabbar-after .button-toolbar.newtab > button:hover::before {
+  opacity: 1;
+  transition-timing-function: ease-out;
 }
 
 /* Chromium 152 Rounded Icons uses page_info_custom, not the former tune
