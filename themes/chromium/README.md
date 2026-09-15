@@ -1,9 +1,17 @@
 # Chromium vector sources
 
 These vector paths are from the Chromium Authors, under the included BSD license.
-Retrieved 2026-09-15 from https://chromium.googlesource.com/chromium/src/+/refs/heads/main/.
+Retrieved 2026-09-16 from the Chromium 152.0.7977.83 tag:
+https://chromium.googlesource.com/chromium/src/+/refs/tags/152.0.7977.83/.
 
-- `chrome/app/vector_icons/`: add, more_vert, reading_list_old, download_toolbar_button_chrome_refresh_old, download, navigate_stop_chrome_refresh_old and close_tab_chrome_refresh_old.
-- `components/vector_icons/`: back_arrow_chrome_refresh_old, forward_arrow_chrome_refresh_old, reload_chrome_refresh_old, extension_chrome_refresh_old, expand_more_old, tune, folder_chrome_refresh_old and account_circle_chrome_refresh_old (stored here as `account_circle_outline.icon`).
+- `chrome/app/vector_icons/`: add, close, close_weight500, more_vert, reading_list_old, download_toolbar_button_chrome_refresh_old, download, navigate_stop_chrome_refresh_old and close_tab_chrome_refresh_old.
+- `components/vector_icons/`: arrow_back, arrow_forward, refresh, the retained `*_old` alternatives, extension_chrome_refresh_old, expand_more_old, tune, folder_chrome_refresh_old and account_circle_chrome_refresh_old (stored here as `account_circle_outline.icon`).
+- `components/omnibox/browser/vector_icons/`: page_info_custom.
 
-The *_old names are Chromium's names for its retained Chrome Refresh artwork. The visible navigation, tab-strip, reading-list, download, extension and folder shapes match the Chrome 152 toolbar inspected on the test Mac. `tools/build_icons.py` converts their path operations to local SVG masks; it performs no network requests. Unused source alternatives are retained for provenance.
+Chrome 152 enables Rounded Icons, so the visible navigation controls use
+`arrow_back`, `arrow_forward`, `refresh` and `close`; tabs use
+`close_weight500`, and a normal secure origin uses
+`page_info_custom`. The `*_old` files remain only where Chrome 152 still selects
+that artwork or as provenance for unused alternatives. `tools/build_icons.py`
+converts the checked-in path operations to local SVG masks and performs no
+network requests.

@@ -37,7 +37,8 @@ TAB_WIDTHS_NEW = 'gAe=240,bAe=150,fAe=32'
 TAB_MIN_WIDTHS_OLD = 'minWidth:t||e||i?s:0,flexBasis:t?u:e?s:fAe'
 TAB_MIN_WIDTHS_NEW = 'minWidth:t?u:e?Math.max(s||0,56):32,flexBasis:t?u:e?Math.max(s||0,56):32'
 TAB_SPRING_OLD = 'OAe={stiffness:600,damping:36,precision:1}'
-TAB_SPRING_NEW = 'OAe={stiffness:600,damping:50,precision:1}'
+TAB_SPRING_PRIOR = 'OAe={stiffness:600,damping:50,precision:1}'
+TAB_SPRING_NEW = 'OAe={stiffness:1200,damping:70,precision:1}'
 TAB_COLLAPSE_OLD = 'const t=e.map((e=>({...e,style:{...e.style,width:0}})));'
 TAB_COLLAPSE_NEW = 'const t=e.map((e=>({...e,style:{...e.style,width:18}})));'
 TAB_CLOSE_ANIMATION_OLD = 'this.setState({animate:!1},(()=>{this.props.closePage(i).then((()=>{this.allowDelayedAnimation()}))}))'
@@ -46,6 +47,10 @@ TAB_CLOSE_FREEZE_OLD = '!e.pinned&&this.props.prefValues[P.kTabsAlignNext]&&e.id
 TAB_CLOSE_FREEZE_NEW = '!e.pinned&&e.id!==this.props.tabs.last()?.id&&this.freezeTabSize(e)'
 
 def transform(source):
+    # Migrate bundles patched by an earlier port revision before applying the
+    # reviewed original-to-current substitutions below.
+    if source.count(TAB_SPRING_PRIOR) == 1 and source.count(TAB_SPRING_NEW) == 0:
+        source = source.replace(TAB_SPRING_PRIOR, TAB_SPRING_NEW, 1)
     pairs = [
         (OLD, NEW),
         (CLASS_ANCHOR, CLASS_SOURCE),
