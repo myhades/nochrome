@@ -38,7 +38,7 @@
   --nc-field: #282828;
   /* neutral99 @ 0x29 over neutral15 */
   --nc-field-hover: #4a4a4a;
-  --nc-hover: #343535;
+  --nc-hover: #474747;
   --nc-chip: #3c3c3c;
   --nc-control-hover: rgba(253,252,251,.102);
   --nc-omnibox-solid-hover: #505050;
@@ -95,13 +95,35 @@
   max-height: 28px !important;
   margin-top: 2px;
   border-radius: 8px !important;
-  transition: background-color 200ms ease-in !important;
+  transition: none !important;
 }
-#browser.tabs-top #tabs-container.top .tab:hover:not(.active) {
-  background: var(--nc-hover) !important;
-  transition-timing-function: ease-out !important;
+#browser.tabs-top #tabs-container.top .tab-wrapper {
+  position: relative;
+}
+#browser.tabs-top #tabs-container.top .tab-wrapper::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 1px;
+  right: 1px;
+  top: 0;
+  bottom: 4px;
+  border-radius: 8px;
+  background: var(--nc-hover);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease-in;
+}
+#browser.tabs-top #tabs-container.top .tab-wrapper:has(> .tab:hover:not(.active))::before {
+  opacity: 1;
+  transition-timing-function: ease-out;
+}
+#browser.tabs-top #tabs-container.top .tab-wrapper > .tab {
+  position: relative;
+  z-index: 1;
 }
 #browser.tabs-top #tabs-container.top .tab .tab-header {
+  z-index: 1;
   flex: 0 0 32px;
   height: 32px;
   padding-left: 10px;
@@ -316,6 +338,7 @@
  * extensions and password controls. No blanket .toolbar-small hiding. */
 @media (prefers-reduced-motion: reduce) {
   #browser.tabs-top #tabs-container.top .tab { transition: none; }
+  #browser.tabs-top #tabs-container.top .tab-wrapper::before { transition: none; }
 }
 
 /* Vivaldi 8.2 measures its tab row at 30px even when the child is 34px.
@@ -562,7 +585,7 @@
 /* Chrome 152 geometry and states. */
 #browser.tabs-top #tabs-container.top .tab:not(.active, .pinned) .tab-header::after {
   opacity: 1;
-  transition: opacity 200ms ease-in;
+  transition: opacity 150ms ease-in;
 }
 #browser.tabs-top #tabs-container.top .tab-position:has(> .tab-wrapper > .tab.active) .tab-header::after,
 #browser.tabs-top #tabs-container.top .tab-strip > span:has(+ span > .tab-position > .tab-wrapper > .tab.active) > .tab-position .tab-header::after {
@@ -580,14 +603,17 @@
   max-width: calc(100% - 2px) !important;
 }
 #browser.tabs-top #tabs-container.top .tab:not(.active, .pinned) .tab-header::after {
-  right: -2px;
+  right: 0;
 }
 #browser.tabs-top #tabs-container.top .toolbar-tabbar-after .button-toolbar.newtab { left: calc(anchor(right) + 3px); }
 #browser#browser.tabs-top .newtab .button-icon {
-  width: 20px !important;
-  height: 20px !important;
-  flex-basis: 20px;
-  mask-size: 20px 20px;
+  width: 15px !important;
+  height: 15px !important;
+  flex-basis: 15px;
+  mask-size: 15px 15px;
+}
+#browser#browser.tabs-top .toolbar-tabbar-after .button-toolbar.newtab > button {
+  color: var(--nc-tab-ink) !important;
 }
 
 /* Chromium 152 Rounded Icons uses page_info_custom, not the former tune
