@@ -71,6 +71,12 @@
   box-shadow: none !important;
   outline: 0 !important;
 }
+#browser.tabs-top:not(.is-settingspage, .popup) :is(.tabbar-wrapper, #tabs-tabbar-container.top) {
+  border-bottom: 0 !important;
+  border-bottom-color: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
 #browser.tabs-top #tabs-tabbar-container.top {
   padding-top: 6px !important;
   height: 34px !important;
@@ -232,12 +238,15 @@
   outline: 0 !important;
 }
 #browser.bookmark-bar-top.address-top:not(.is-settingspage, .popup) .mainbar:has(.toolbar-addressbar.toolbar-visible) {
+  border-top: 0 !important;
   border-bottom: 0 !important;
+  border-color: transparent !important;
   box-shadow: none !important;
   outline: 0 !important;
 }
 #browser.bookmark-bar-top .bookmark-bar.address-top {
   border-top: 0 !important;
+  border-top-color: transparent !important;
   box-shadow: none !important;
   outline: 0 !important;
 }
@@ -247,6 +256,8 @@
   gap: 0;
 }
 #browser .toolbar-addressbar .UrlBar-AddressField {
+  position: relative;
+  isolation: isolate;
   height: 34px !important;
   border: 0 !important;
   border-radius: 17px !important;
@@ -258,14 +269,33 @@
   outline: 0;
   transition: none;
 }
-#browser .toolbar-addressbar .UrlBar-AddressField:hover:not(:focus-within):not(:has(.SiteInfoButton:hover)) {
-  background: var(--nc-field-hover) !important;
-  transition: background-color 200ms ease-out;
+#browser .toolbar-addressbar .UrlBar-AddressField::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--nc-field-hover);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease-in;
+}
+#browser .toolbar-addressbar .UrlBar-AddressField > * {
+  position: relative;
+  z-index: 1;
+}
+#browser .toolbar-addressbar .UrlBar-AddressField:hover:not(:focus-within):not(:has(.SiteInfoButton:hover))::before {
+  opacity: 1;
+  transition-timing-function: ease-out;
 }
 #browser .toolbar-addressbar .UrlBar-AddressField:focus-within {
   background: var(--nc-surface) !important;
   outline: 0 !important;
   box-shadow: inset 0 0 0 2px var(--nc-focus-ring) !important;
+  transition: none;
+}
+#browser .toolbar-addressbar .UrlBar-AddressField:focus-within::before {
+  opacity: 0;
   transition: none;
 }
 #browser .toolbar-addressbar .UrlBar-AddressField:focus-within:has(.SiteInfoButton:hover) {
@@ -323,12 +353,12 @@
 #browser .toolbar-addressbar .SiteInfoButton > button:hover {
   background: var(--nc-siteinfo-hover) !important;
 }
-#browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within):not(:has(.OmniDropdown)) .SiteInfoButton:is(.warning,.insecure) {
+#browser .toolbar-addressbar .UrlBar-AddressField:not(:has(.OmniDropdown)) .SiteInfoButton:is(.warning,.insecure) {
   width: auto !important;
   min-width: 24px !important;
   border-radius: 12px;
 }
-#browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within):not(:has(.OmniDropdown)) .SiteInfoButton:is(.warning,.insecure) > button {
+#browser .toolbar-addressbar .UrlBar-AddressField:not(:has(.OmniDropdown)) .SiteInfoButton:is(.warning,.insecure) > button {
   width: auto !important;
   min-width: 24px !important;
   padding: 0 8px 0 5px !important;
@@ -336,13 +366,13 @@
   border-radius: 12px;
   background: var(--nc-chip) !important;
 }
-#browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within):not(:has(.OmniDropdown)) .SiteInfoButton.warning > button {
+#browser .toolbar-addressbar .UrlBar-AddressField:not(:has(.OmniDropdown)) .SiteInfoButton.warning > button {
   color: var(--nc-siteinfo-ink) !important;
 }
-#browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within):not(:has(.OmniDropdown)) .SiteInfoButton.insecure > button {
+#browser .toolbar-addressbar .UrlBar-AddressField:not(:has(.OmniDropdown)) .SiteInfoButton.insecure > button {
   color: var(--nc-danger) !important;
 }
-#browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within):not(:has(.OmniDropdown)) .SiteInfoButton:is(.warning,.insecure) > button:hover {
+#browser .toolbar-addressbar .UrlBar-AddressField:not(:has(.OmniDropdown)) .SiteInfoButton:is(.warning,.insecure) > button:hover {
   background: var(--nc-siteinfo-hover) !important;
 }
 #browser .toolbar-addressbar .SiteInfoButton:is(.warning,.insecure) .button-title {
@@ -353,26 +383,22 @@
   line-height: 24px;
   white-space: nowrap;
 }
-#browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within):not(:has(.OmniDropdown)) .SiteInfoButton.insecure > button::after {
+#browser .toolbar-addressbar .UrlBar-AddressField:not(:has(.OmniDropdown)) .SiteInfoButton.insecure > button::after {
   content: "Not secure";
   display: inline;
   font-size: 12px;
   line-height: 24px;
   white-space: nowrap;
 }
-#browser .toolbar-addressbar .UrlBar-AddressField:focus-within .SiteInfoButton:not(:hover) > button,
 #browser .toolbar-addressbar .UrlBar-AddressField:has(.OmniDropdown) .SiteInfoButton:not(:hover) > button {
   background: transparent !important;
   color: var(--nc-muted) !important;
 }
-#browser .toolbar-addressbar .UrlBar-AddressField:focus-within .SiteInfoButton:is(.warning,.insecure),
 #browser .toolbar-addressbar .UrlBar-AddressField:has(.OmniDropdown) .SiteInfoButton:is(.warning,.insecure) {
   width: 24px !important;
   min-width: 24px !important;
 }
-#browser .toolbar-addressbar .UrlBar-AddressField:focus-within .SiteInfoButton:is(.warning,.insecure) .button-title,
 #browser .toolbar-addressbar .UrlBar-AddressField:has(.OmniDropdown) .SiteInfoButton:is(.warning,.insecure) .button-title,
-#browser .toolbar-addressbar .UrlBar-AddressField:focus-within .SiteInfoButton.insecure > button::after,
 #browser .toolbar-addressbar .UrlBar-AddressField:has(.OmniDropdown) .SiteInfoButton.insecure > button::after {
   display: none !important;
 }
@@ -391,13 +417,13 @@
   transition: none !important;
   animation: none !important;
 }
-/* Theme navigation SVGs use 24-unit canvases. Native Vivaldi glyphs have
-   padded 28-unit canvases: preserve those instead of shrinking every icon. */
+/* Keep the Chromium navigation vectors optically smaller than the 34px
+   button targets; icons.css uses the same 18px generated geometry. */
 #browser .toolbar-addressbar [data-name]:is([data-name="Back"],[data-name="Forward"],[data-name="Reload"]) .button-icon,
 #browser .toolbar-addressbar [data-name]:is([data-name="Back"],[data-name="Forward"],[data-name="Reload"]) .button-icon svg {
-  width: 19px !important;
-  height: 19px !important;
-  flex: 0 0 19px;
+  width: 18px !important;
+  height: 18px !important;
+  flex: 0 0 18px;
 }
 #browser .toolbar-addressbar > .button-toolbar > button {
   width: 34px;
@@ -785,14 +811,14 @@
 
 /* Chrome uses short, round-ended separators instead of hairline SVG rules. */
 #browser .toolbar-addressbar .button-toolbar.toolbar-divider {
-  width: 10px !important;
-  min-width: 10px !important;
-  flex: 0 0 10px !important;
+  width: 12px !important;
+  min-width: 12px !important;
+  flex: 0 0 12px !important;
   position: relative;
 }
 #browser .toolbar-addressbar .button-toolbar.toolbar-divider > button {
-  width: 10px !important;
-  min-width: 10px !important;
+  width: 12px !important;
+  min-width: 12px !important;
   height: 32px !important;
   padding: 0 !important;
   position: relative;
@@ -803,7 +829,7 @@
 #browser .toolbar-addressbar .button-toolbar.toolbar-divider > button::after {
   content: "";
   position: absolute;
-  left: 4px;
+  left: 5px;
   top: 8px;
   width: 2px;
   height: 16px;

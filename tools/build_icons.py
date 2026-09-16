@@ -30,12 +30,12 @@ def svg(filename, canvas):
     return 'url("data:image/svg+xml,'+quote(data,safe='')+'")'
 
 specs = [
-    ('#browser .toolbar-addressbar [data-name="Back"] .button-icon', 'arrow_back.icon',24,20),
-    ('#browser .toolbar-addressbar [data-name="Forward"] .button-icon', 'arrow_forward.icon',24,20),
-    ('#browser .toolbar-addressbar [data-name="Reload"] .button-icon', 'refresh.icon',24,20),
-    ('#browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within):not(:has(.OmniDropdown)) .SiteInfoButton > button[title="Site info"] .button-icon', 'page_info_custom.icon',24,16),
-    ('#browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within):not(:has(.OmniDropdown)) .SiteInfoButton.warning > button .button-icon', 'warning.icon',20,16),
-    ('#browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within):not(:has(.OmniDropdown)) .SiteInfoButton.insecure > button .button-icon', 'dangerous_filled.icon',20,16),
+    ('#browser .toolbar-addressbar [data-name="Back"] .button-icon', 'arrow_back.icon',24,18),
+    ('#browser .toolbar-addressbar [data-name="Forward"] .button-icon', 'arrow_forward.icon',24,18),
+    ('#browser .toolbar-addressbar [data-name="Reload"] .button-icon', 'refresh.icon',24,18),
+    ('#browser .toolbar-addressbar .UrlBar-AddressField:not(:has(.OmniDropdown)) .SiteInfoButton > button[title="Site info"] .button-icon', 'page_info_custom.icon',24,16),
+    ('#browser .toolbar-addressbar .UrlBar-AddressField:not(:has(.OmniDropdown)) .SiteInfoButton.warning > button .button-icon', 'warning.icon',20,16),
+    ('#browser .toolbar-addressbar .UrlBar-AddressField:not(:has(.OmniDropdown)) .SiteInfoButton.insecure > button .button-icon', 'dangerous_filled.icon',20,16),
     ('#browser .toolbar-addressbar [data-name="Extensions"] .button-icon', 'extension_chrome_refresh_old.icon',20,20),
     ('#browser .toolbar-addressbar [data-name="ReadingList"] .button-icon', 'reading_list_old.icon',20,20),
     ('#browser .toolbar-addressbar [data-name="DownloadButton"] .button-icon', 'download_toolbar_button_chrome_refresh_old.icon',20,20),
