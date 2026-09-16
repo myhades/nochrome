@@ -989,6 +989,12 @@
   background: var(--nc-surface) !important;
   box-shadow: inset 0 0 0 1px var(--nc-typed-border) !important;
 }
+/* The quiet typed-value outline belongs only to the resting state. When the
+   field itself is hovered, remove it so the Chromium hover fill stands alone;
+   hovering the mutually exclusive site-info control keeps the outline. */
+#browser .toolbar-addressbar .UrlBar-AddressField:has(.SiteInfoButton.internal):has(#urlFieldInput:not(:focus):not(:placeholder-shown)):not(:has(.OmniDropdown)):hover:not(:has(.SiteInfoButton:hover)) {
+  box-shadow: none !important;
+}
 #browser .toolbar-addressbar .OmniDropdown {
   left: -4px !important;
   right: -4px !important;
