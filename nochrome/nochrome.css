@@ -21,6 +21,7 @@
   --nc-tab-ink: #474747;
   --nc-newtab-ink: #474747;
   --nc-siteinfo-ink: #000000;
+  --nc-siteinfo-hover: #d4d9e4;
   --nc-focus-ring: #739cf0;
   --nc-boundary: #e0e1df;
   /* neutral10 @ 0x0f over neutral100 */
@@ -49,6 +50,7 @@
   --nc-tab-ink: #e4e4e4;
   --nc-newtab-ink: #c7c7c7;
   --nc-siteinfo-ink: #ffffff;
+  --nc-siteinfo-hover: #515151;
   --nc-boundary: #494b4a;
   --nc-dropdown-highlight: #505050;
   --nc-link: #a8c7fa;
@@ -63,6 +65,11 @@
 #browser.tabs-top #tabs-tabbar-container.top {
   background: var(--nc-frame) !important;
   color: var(--nc-ink);
+}
+#browser.tabs-top:not(.is-settingspage, .popup) > #header {
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
 }
 #browser.tabs-top #tabs-tabbar-container.top {
   padding-top: 6px !important;
@@ -251,7 +258,7 @@
   outline: 0;
   transition: none;
 }
-#browser .toolbar-addressbar .UrlBar-AddressField:hover:not(:focus-within) {
+#browser .toolbar-addressbar .UrlBar-AddressField:hover:not(:focus-within):not(:has(.SiteInfoButton:hover)) {
   background: var(--nc-field-hover) !important;
   transition: background-color 200ms ease-out;
 }
@@ -260,6 +267,10 @@
   outline: 0 !important;
   box-shadow: inset 0 0 0 2px var(--nc-focus-ring) !important;
   transition: none;
+}
+#browser .toolbar-addressbar .UrlBar-AddressField:focus-within:has(.SiteInfoButton:hover) {
+  background: var(--nc-field) !important;
+  box-shadow: none !important;
 }
 #browser .toolbar-addressbar .UrlBar-AddressField ::selection {
   background: var(--nc-focus-ring);
@@ -278,20 +289,26 @@
   transition: color 120ms linear;
 }
 #browser .toolbar-addressbar .SiteInfoButton {
-  min-width: 26px !important;
-  width: 26px !important;
-  height: 26px !important;
-  margin-left: -1px;
-  margin-right: 4px;
+  min-width: 24px !important;
+  width: 24px !important;
+  height: 24px !important;
+  margin-left: 1px;
+  margin-right: 6px;
   border-radius: 50%;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
 }
 #browser .toolbar-addressbar .SiteInfoButton > button {
-  width: 26px !important;
-  min-width: 26px !important;
-  height: 26px !important;
-  min-height: 26px !important;
+  width: 24px !important;
+  min-width: 24px !important;
+  height: 24px !important;
+  min-height: 24px !important;
   padding: 0 !important;
   border-radius: 50%;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
   background: var(--nc-chip) !important;
   transition: background-color 250ms ease-in-out;
 }
@@ -304,19 +321,19 @@
   flex-basis: 16px;
 }
 #browser .toolbar-addressbar .SiteInfoButton > button:hover {
-  background: var(--nc-omnibox-solid-hover) !important;
+  background: var(--nc-siteinfo-hover) !important;
 }
 #browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within):not(:has(.OmniDropdown)) .SiteInfoButton:is(.warning,.insecure) {
   width: auto !important;
-  min-width: 26px !important;
-  border-radius: 13px;
+  min-width: 24px !important;
+  border-radius: 12px;
 }
 #browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within):not(:has(.OmniDropdown)) .SiteInfoButton:is(.warning,.insecure) > button {
   width: auto !important;
-  min-width: 26px !important;
+  min-width: 24px !important;
   padding: 0 8px 0 5px !important;
   gap: 4px;
-  border-radius: 13px;
+  border-radius: 12px;
   background: var(--nc-chip) !important;
 }
 #browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within):not(:has(.OmniDropdown)) .SiteInfoButton.warning > button {
@@ -326,32 +343,32 @@
   color: var(--nc-danger) !important;
 }
 #browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within):not(:has(.OmniDropdown)) .SiteInfoButton:is(.warning,.insecure) > button:hover {
-  background: var(--nc-omnibox-solid-hover) !important;
+  background: var(--nc-siteinfo-hover) !important;
 }
 #browser .toolbar-addressbar .SiteInfoButton:is(.warning,.insecure) .button-title {
   display: inline !important;
   margin: 0 !important;
   padding: 0 !important;
   font-size: 12px;
-  line-height: 26px;
+  line-height: 24px;
   white-space: nowrap;
 }
 #browser .toolbar-addressbar .UrlBar-AddressField:not(:focus-within):not(:has(.OmniDropdown)) .SiteInfoButton.insecure > button::after {
   content: "Not secure";
   display: inline;
   font-size: 12px;
-  line-height: 26px;
+  line-height: 24px;
   white-space: nowrap;
 }
-#browser .toolbar-addressbar .UrlBar-AddressField:focus-within .SiteInfoButton > button,
-#browser .toolbar-addressbar .UrlBar-AddressField:has(.OmniDropdown) .SiteInfoButton > button {
+#browser .toolbar-addressbar .UrlBar-AddressField:focus-within .SiteInfoButton:not(:hover) > button,
+#browser .toolbar-addressbar .UrlBar-AddressField:has(.OmniDropdown) .SiteInfoButton:not(:hover) > button {
   background: transparent !important;
   color: var(--nc-muted) !important;
 }
 #browser .toolbar-addressbar .UrlBar-AddressField:focus-within .SiteInfoButton:is(.warning,.insecure),
 #browser .toolbar-addressbar .UrlBar-AddressField:has(.OmniDropdown) .SiteInfoButton:is(.warning,.insecure) {
-  width: 26px !important;
-  min-width: 26px !important;
+  width: 24px !important;
+  min-width: 24px !important;
 }
 #browser .toolbar-addressbar .UrlBar-AddressField:focus-within .SiteInfoButton:is(.warning,.insecure) .button-title,
 #browser .toolbar-addressbar .UrlBar-AddressField:has(.OmniDropdown) .SiteInfoButton:is(.warning,.insecure) .button-title,
@@ -378,9 +395,9 @@
    padded 28-unit canvases: preserve those instead of shrinking every icon. */
 #browser .toolbar-addressbar [data-name]:is([data-name="Back"],[data-name="Forward"],[data-name="Reload"]) .button-icon,
 #browser .toolbar-addressbar [data-name]:is([data-name="Back"],[data-name="Forward"],[data-name="Reload"]) .button-icon svg {
-  width: 20px !important;
-  height: 20px !important;
-  flex: 0 0 20px;
+  width: 19px !important;
+  height: 19px !important;
+  flex: 0 0 19px;
 }
 #browser .toolbar-addressbar > .button-toolbar > button {
   width: 34px;
@@ -412,6 +429,14 @@
   align-self: flex-start;
   align-items: flex-start;
   padding-top: 0;
+}
+/* Vivaldi paints the otherwise empty tab-bar drop targets as solid blocks
+   while toolbar editing is active. Keep the hit areas but match Chrome's
+   visually transparent customization mode. */
+#browser#browser.toolbar-edit-mode.tabs-top #tabs-tabbar-container :is(.toolbar-tabbar-before, .toolbar-tabbar-after) {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
 }
 #browser.tabs-top .toolbar-tabbar-before { margin-left: 12px; }
 #browser.tabs-top .toolbar-tabbar-after .button-toolbar > button {
@@ -760,14 +785,14 @@
 
 /* Chrome uses short, round-ended separators instead of hairline SVG rules. */
 #browser .toolbar-addressbar .button-toolbar.toolbar-divider {
-  width: 8px !important;
-  min-width: 8px !important;
-  flex: 0 0 8px !important;
+  width: 10px !important;
+  min-width: 10px !important;
+  flex: 0 0 10px !important;
   position: relative;
 }
 #browser .toolbar-addressbar .button-toolbar.toolbar-divider > button {
-  width: 8px !important;
-  min-width: 8px !important;
+  width: 10px !important;
+  min-width: 10px !important;
   height: 32px !important;
   padding: 0 !important;
   position: relative;
@@ -778,7 +803,7 @@
 #browser .toolbar-addressbar .button-toolbar.toolbar-divider > button::after {
   content: "";
   position: absolute;
-  left: 3px;
+  left: 4px;
   top: 8px;
   width: 2px;
   height: 16px;
