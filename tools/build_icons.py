@@ -29,11 +29,15 @@ def svg(filename, canvas):
     data = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {canvas} {canvas}"><path fill="black" fill-rule="{fill_rule}" d="{" ".join(path)}"/></svg>'
     return 'url("data:image/svg+xml,'+quote(data,safe='')+'")'
 
+def svg_asset(filename):
+    data = (root/'themes'/filename).read_text()
+    return 'url("data:image/svg+xml,'+quote(data,safe='')+'")'
+
 specs = [
     ('#browser .toolbar-addressbar [data-name="Back"] .button-icon', 'arrow_back.icon',24,18),
     ('#browser .toolbar-addressbar [data-name="Forward"] .button-icon', 'arrow_forward.icon',24,18),
     ('#browser .toolbar-addressbar [data-name="Reload"] .button-icon', 'refresh.icon',24,18),
-    ('#browser .toolbar-addressbar .UrlBar-AddressField:not(:has(.OmniDropdown)) .SiteInfoButton > button[title="Site info"] .button-icon', 'page_info_custom.icon',24,16),
+    ('#browser .toolbar-addressbar .UrlBar-AddressField:not(:has(.OmniDropdown)) .SiteInfoButton:not(.empty):not(.internal) > button[title="Site info"] .button-icon', 'page_info_custom.icon',24,16),
     ('#browser .toolbar-addressbar .UrlBar-AddressField:not(:has(.OmniDropdown)) .SiteInfoButton.warning > button .button-icon', 'warning.icon',20,16),
     ('#browser .toolbar-addressbar .UrlBar-AddressField:not(:has(.OmniDropdown)) .SiteInfoButton.insecure > button .button-icon', 'dangerous_filled.icon',20,16),
     ('#browser .toolbar-addressbar [data-name="Extensions"] .button-icon', 'extension_chrome_refresh_old.icon',20,20),
@@ -50,7 +54,8 @@ css += [f'#browser .toolbar-addressbar [data-name="Reload"] button[title^="Stop"
 css += [f'#browser.tabs-top .toolbar-tabbar-before [data-name="TabButton"]::after {{ border:0 !important; transform:none !important; width:16px; height:16px; color:var(--nc-tab-ink) !important; background:currentColor; mask:{svg("expand_more_old.icon",16)} center / contain no-repeat; filter:drop-shadow(.4px 0 currentColor) drop-shadow(-.4px 0 currentColor); }}']
 css += ['#browser.tabs-top #tabs-container.top .tab .close > svg { display:none !important; }', f'#browser.tabs-top #tabs-container.top .tab .close::after {{ content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:14px !important; height:14px !important; background:currentColor; mask:{svg("close_weight500.icon",24)} center / contain no-repeat; filter:drop-shadow(.2px 0 currentColor) drop-shadow(-.2px 0 currentColor); }}']
 css += [f'#browser .toolbar-addressbar .BookmarkButton .button-on .button-icon {{ mask:{svg("star_active_chrome_refresh_old.icon",20)} center / contain no-repeat; }}']
-css += ['#browser .bookmark-bar .bookmarkbarItem.folder > .folder-icon { display:none !important; }', f'#browser .bookmark-bar .bookmarkbarItem.folder::before {{ content:""; width:16px; height:16px; flex:0 0 16px; background:currentColor; mask:{svg("folder_chrome_refresh_old.icon",20)} center / contain no-repeat; }}']
+css += ['#browser .bookmark-bar .bookmarkbarItem.folder > .folder-icon { display:none !important; }', f'#browser .bookmark-bar .bookmarkbarItem.folder::before {{ content:""; width:18px; height:18px; flex:0 0 18px; background:currentColor; mask:{svg("folder_chrome_refresh_old.icon",20)} center / contain no-repeat; }}']
+css += [f'#browser {{ --nc-search-icon: {svg("search_chrome_refresh_old.icon",20)}; --nc-duckduckgo-logo: {svg_asset("search_duckduckgo.svg")}; }}']
 css += ['#browser .toolbar-addressbar [data-name="AccountButton"] img[src*="IDR_PROFILE_VIVALDI_AVATAR"] { display:none !important; }', f'#browser .toolbar-addressbar [data-name="AccountButton"]:has(img[src*="IDR_PROFILE_VIVALDI_AVATAR"])::after {{ content:""; width:22px; height:22px; flex:0 0 22px; background:currentColor; mask:{svg("account_circle_outline.icon",20)} center / contain no-repeat; }}']
 (root/'nochrome/icons.css').write_text(('\n'.join(css)+'\n').replace('#browser ', '#browser#browser ').replace('#browser.tabs-top', '#browser#browser.tabs-top'))
 print('Generated icons.css')

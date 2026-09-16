@@ -22,7 +22,7 @@
   --nc-newtab-ink: #474747;
   --nc-siteinfo-ink: #000000;
   --nc-siteinfo-hover: #d4d9e4;
-  --nc-focus-ring: #739cf0;
+  --nc-focus-ring: #3063ca;
   --nc-boundary: #e0e1df;
   /* neutral10 @ 0x0f over neutral100 */
   --nc-dropdown-highlight: #f2f2f2;
@@ -263,8 +263,8 @@
   border-radius: 17px !important;
   background: var(--nc-field) !important;
   color: var(--nc-ink) !important;
-  margin: 0 5px;
-  padding: 0 4px;
+  margin: 0 7px;
+  padding: 0 6px;
   box-shadow: none;
   outline: 0;
   transition: none;
@@ -280,7 +280,7 @@
   pointer-events: none;
   transition: opacity 200ms ease-in;
 }
-#browser .toolbar-addressbar .UrlBar-AddressField > * {
+#browser .toolbar-addressbar .UrlBar-AddressField > :not(.UrlBar-UrlFieldWrapper) {
   position: relative;
   z-index: 1;
 }
@@ -297,10 +297,6 @@
 #browser .toolbar-addressbar .UrlBar-AddressField:focus-within::before {
   opacity: 0;
   transition: none;
-}
-#browser .toolbar-addressbar .UrlBar-AddressField:focus-within:has(.SiteInfoButton:hover) {
-  background: var(--nc-field) !important;
-  box-shadow: none !important;
 }
 #browser .toolbar-addressbar .UrlBar-AddressField ::selection {
   background: var(--nc-focus-ring);
@@ -379,14 +375,16 @@
   display: inline !important;
   margin: 0 !important;
   padding: 0 !important;
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 500;
   line-height: 24px;
   white-space: nowrap;
 }
 #browser .toolbar-addressbar .UrlBar-AddressField:not(:has(.OmniDropdown)) .SiteInfoButton.insecure > button::after {
   content: "Not secure";
   display: inline;
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 500;
   line-height: 24px;
   white-space: nowrap;
 }
@@ -401,6 +399,24 @@
 #browser .toolbar-addressbar .UrlBar-AddressField:has(.OmniDropdown) .SiteInfoButton:is(.warning,.insecure) .button-title,
 #browser .toolbar-addressbar .UrlBar-AddressField:has(.OmniDropdown) .SiteInfoButton.insecure > button::after {
   display: none !important;
+}
+
+/* Vivaldi already supplies the current search engine or selected suggestion
+   favicon while the field is empty/editing. Keep it as the inner circle. */
+#browser .toolbar-addressbar .SiteInfoButton:is(.empty,.internal) .button-icon,
+#browser .toolbar-addressbar .SiteInfoButton:is(.empty,.internal) .button-icon :is(img,svg) {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  border-radius: 50% !important;
+}
+#browser .toolbar-addressbar .UrlBar-AddressField:has(#urlFieldInput[placeholder^="Search DuckDuckGo"]):not(:has(.OmniDropdown)) .SiteInfoButton.empty .button-icon {
+  background: var(--nc-duckduckgo-logo) center / 16px 16px no-repeat !important;
+  -webkit-mask: none !important;
+  mask: none !important;
+}
+#browser .toolbar-addressbar .UrlBar-AddressField:has(#urlFieldInput[placeholder^="Search DuckDuckGo"]):not(:has(.OmniDropdown)) .SiteInfoButton.empty .button-icon > :is(svg,img) {
+  visibility: hidden !important;
 }
 /* Keep native security icons, origin text, permission chips, popup anchors,
  * extensions and password controls. No blanket .toolbar-small hiding. */
@@ -613,6 +629,11 @@
   background: var(--nc-control-hover) !important;
   transition-timing-function: ease-out !important;
 }
+#browser .bookmark-bar .bookmarkbarItem:not(.folder) :is(img,.favicon,svg) {
+  width: 18px !important;
+  height: 18px !important;
+  flex: 0 0 18px !important;
+}
 #browser .bookmark-bar button .separator {
   width: 2px;
   height: 16px !important;
@@ -811,14 +832,14 @@
 
 /* Chrome uses short, round-ended separators instead of hairline SVG rules. */
 #browser .toolbar-addressbar .button-toolbar.toolbar-divider {
-  width: 12px !important;
-  min-width: 12px !important;
-  flex: 0 0 12px !important;
+  width: 16px !important;
+  min-width: 16px !important;
+  flex: 0 0 16px !important;
   position: relative;
 }
 #browser .toolbar-addressbar .button-toolbar.toolbar-divider > button {
-  width: 12px !important;
-  min-width: 12px !important;
+  width: 16px !important;
+  min-width: 16px !important;
   height: 32px !important;
   padding: 0 !important;
   position: relative;
@@ -829,7 +850,7 @@
 #browser .toolbar-addressbar .button-toolbar.toolbar-divider > button::after {
   content: "";
   position: absolute;
-  left: 5px;
+  left: 7px;
   top: 8px;
   width: 2px;
   height: 16px;
@@ -882,7 +903,7 @@
   border-radius: 17px !important;
   background: var(--nc-surface) !important;
   outline: 0 !important;
-  box-shadow: inset 0 0 0 2px var(--nc-focus-ring), 0 10px 26px rgba(0,0,0,.36), 0 2px 8px rgba(0,0,0,.22) !important;
+  box-shadow: inset 0 0 0 2px var(--nc-focus-ring) !important;
 }
 #browser .toolbar-addressbar .OmniDropdown {
   left: -4px !important;
@@ -892,7 +913,7 @@
   border-radius: 16px !important;
   background: var(--nc-surface) !important;
   color: var(--nc-ink) !important;
-  box-shadow: none !important;
+  box-shadow: 0 10px 26px rgba(0,0,0,.36), 0 2px 8px rgba(0,0,0,.22) !important;
   line-height: 1.25;
 }
 #browser .toolbar-addressbar .below .OmniDropdown {
@@ -918,6 +939,35 @@
 #browser .toolbar-addressbar .OmniLinkItem-Favicon :is(img,svg) {
   width: 20px !important;
   height: 20px !important;
+}
+
+/* Chromium's neutral fallback for suggestions that have no fetched favicon. */
+#browser .toolbar-addressbar .OmniLinkItem:not(:has(> .OmniLinkItem-Favicon))::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  transform: translateY(-50%);
+  background: var(--nc-muted);
+  -webkit-mask: var(--nc-search-icon) center / contain no-repeat;
+  mask: var(--nc-search-icon) center / contain no-repeat;
+  pointer-events: none;
+}
+
+/* Match the 28px Chromium InkDrop target used by the toolbar and preserve a
+   small trailing inset inside the omnibox. */
+#browser .toolbar-addressbar .UrlBar-AddressField > .toolbar-insideinput:last-child {
+  margin-right: 2px !important;
+}
+#browser .toolbar-addressbar .UrlBar-AddressField > .toolbar-insideinput:last-child .button-toolbar:not(.toolbar-divider,.SiteInfoButton) > button {
+  width: 34px !important;
+  min-width: 34px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  padding: 0 !important;
+  background: transparent !important;
 }
 #browser .toolbar-addressbar .OmniLinkItem-DisplayText {
   height: 20px;

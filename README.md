@@ -12,7 +12,7 @@ Chrome-inspired browser chrome, based on [nokocu/nochrome](https://github.com/no
 4. In Settings → Themes, import `nochrome/theme-nochrome-light.zip` and `nochrome/theme-nochrome-dark.zip`.
 5. Under Theme Schedule choose **Operating System**; map **Light → noChrome Light**, **Dark → noChrome Dark**. Importing a theme may replace the current schedule entry, so configure the schedule after both imports.
 6. Enable **Use Icon Set from → Currently Active Theme**.
-7. On the tested macOS version, run `python3 tools/patch_macos_menu.py` and restart to add the functioning three-dot menu after the profile. This modifies the installed `bundle.js`; the unmodified resource is backed up under `~/Library/Application Support/noChrome/backups/8.2.4133.52/`.
+7. On the tested macOS version, run `python3 tools/patch_macos_menu.py` and then `python3 tools/patch_favicon_fallback.py`. Restart to add the functioning three-dot menu and replace Vivaldi's missing-favicon document image with Chromium's search icon. These modify the installed `bundle.js`; the unmodified resource is backed up under `~/Library/Application Support/noChrome/backups/8.2.4133.52/`.
 
 On the tested Mac, typing the CSS path directly produced a startup splash hang; selecting the same directory through the native folder picker worked, including a subsequent full restart. Use the picker rather than pasting into the settings field.
 
@@ -52,7 +52,7 @@ Run `python3 tools/build_icons.py` to regenerate `nochrome/icons.css` from the c
 
 Run `python3 tools/build_themes.py` to rebuild the theme ZIP files from `themes/*.json` and the SVG assets; then run `python3 tools/check_themes.py`. Restart Vivaldi after CSS edits. Reimport rebuilt themes to update installed theme assets.
 
-To remove the native menu patch, run `python3 tools/patch_macos_menu.py --restore` and restart. Vivaldi updates replace the patched resource: the patch deliberately refuses other versions and requires review for each update.
+To remove both `bundle.js` patches, run `python3 tools/patch_macos_menu.py --restore` and restart. Vivaldi updates replace the patched resource: the patches deliberately target the tested version and require review for each update.
 
 To uninstall the styling, clear **Custom UI Modifications**, choose a built-in theme and restart. To temporarily disable styling, rename `nochrome/nochrome.css` to a name without the `.css` suffix and restart. If a saved directory path itself prevents launch, with Vivaldi fully stopped and the profile backed up, clear only `vivaldi.appearance.css_ui_mods_directory` in the profile's `Preferences` JSON. Do not replace the entire profile.
 
