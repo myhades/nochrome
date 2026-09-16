@@ -18,6 +18,10 @@ EMPTY_CANDIDATE = (
     '"img"===n.faviconType&&(e="img"),{favIconUrl:n.faviconUrl,favIconType:e}}'
 )
 ENGINE_FALLBACK = EMPTY_CANDIDATE.replace("if(n){", "if(n?.faviconUrl){", 1)
+ENGINE_SEARCH_CLASS_OLD = '):j=n[28];const F=j;let U;'
+ENGINE_SEARCH_CLASS_NEW = (
+    '):j=n[28];const F=j+("search"===D?" OmniLinkItem--EngineSearch":"");let U;'
+)
 
 
 def chromium_search_data_url() -> str:
@@ -65,6 +69,12 @@ def main() -> None:
             raise SystemExit("Expected omnibox candidate-favicon branch was not found")
         updated = updated.replace(EMPTY_CANDIDATE, ENGINE_FALLBACK, 1)
         changes.append("search-engine fallback for candidates without favicons")
+    if ENGINE_SEARCH_CLASS_NEW not in updated:
+        count = updated.count(ENGINE_SEARCH_CLASS_OLD)
+        if count != 1:
+            raise SystemExit("Expected omnibox item class branch was not found")
+        updated = updated.replace(ENGINE_SEARCH_CLASS_OLD, ENGINE_SEARCH_CLASS_NEW, 1)
+        changes.append("search-engine result styling marker")
     if not changes:
         print("Favicon patches already installed")
         return

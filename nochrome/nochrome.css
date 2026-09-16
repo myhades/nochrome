@@ -12,7 +12,7 @@
   /* neutral10 @ 0x0f over neutral94 */
   --nc-field-hover: #e3e1e1;
   /* Neutral tab hover endpoint, lifted slightly for the requested visibility. */
-  --nc-hover: #f2f2f2;
+  --nc-hover: #c7c7c7;
   --nc-chip: #ffffff;
   --nc-control-hover: rgba(31,31,31,.059);
   --nc-omnibox-solid-hover: #dadada;
@@ -23,6 +23,9 @@
   --nc-siteinfo-ink: #000000;
   --nc-siteinfo-hover: #d4d9e4;
   --nc-focus-ring: #3063ca;
+  --nc-accent: #3265cb;
+  --nc-typed-border: #c0c0c0;
+  --nc-erase-ink: #434343;
   --nc-boundary: #e0e1df;
   /* neutral10 @ 0x0f over neutral100 */
   --nc-dropdown-highlight: #f2f2f2;
@@ -51,6 +54,9 @@
   --nc-newtab-ink: #c7c7c7;
   --nc-siteinfo-ink: #ffffff;
   --nc-siteinfo-hover: #515151;
+  --nc-accent: #739cf0;
+  --nc-typed-border: #757575;
+  --nc-erase-ink: #c7c7c7;
   --nc-boundary: #494b4a;
   --nc-dropdown-highlight: #505050;
   --nc-link: #a8c7fa;
@@ -263,7 +269,7 @@
   border-radius: 17px !important;
   background: var(--nc-field) !important;
   color: var(--nc-ink) !important;
-  margin: 0 7px;
+  margin: 0 9px;
   padding: 0 6px;
   box-shadow: none;
   outline: 0;
@@ -288,19 +294,23 @@
   opacity: 1;
   transition-timing-function: ease-out;
 }
-#browser .toolbar-addressbar .UrlBar-AddressField:focus-within {
+#browser .toolbar-addressbar .UrlBar-AddressField:has(#urlFieldInput:focus) {
   background: var(--nc-surface) !important;
   outline: 0 !important;
   box-shadow: inset 0 0 0 2px var(--nc-focus-ring) !important;
   transition: none;
 }
-#browser .toolbar-addressbar .UrlBar-AddressField:focus-within::before {
+#browser .toolbar-addressbar .UrlBar-AddressField:has(#urlFieldInput:focus)::before {
   opacity: 0;
   transition: none;
 }
 #browser .toolbar-addressbar .UrlBar-AddressField ::selection {
   background: var(--nc-focus-ring);
-  color: #ffffff;
+  color: var(--nc-ink);
+}
+#browser.mac .toolbar-addressbar .UrlBar-UrlField.pseudo-selected:first-line {
+  background-color: var(--nc-focus-ring) !important;
+  color: var(--nc-ink) !important;
 }
 #browser .toolbar-addressbar .UrlField,
 #browser .toolbar-addressbar #urlFieldInput { font-size: 14px !important; color: var(--nc-ink); }
@@ -358,7 +368,7 @@
   width: auto !important;
   min-width: 24px !important;
   padding: 0 8px 0 5px !important;
-  gap: 3px;
+  gap: 2px;
   border-radius: 12px;
   background: var(--nc-chip) !important;
 }
@@ -375,16 +385,16 @@
   display: inline !important;
   margin: 0 !important;
   padding: 0 !important;
-  font-size: 13.5px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
   line-height: 24px;
   white-space: nowrap;
 }
 #browser .toolbar-addressbar .UrlBar-AddressField:not(:has(.OmniDropdown)) .SiteInfoButton.insecure > button::after {
   content: "Not secure";
   display: inline;
-  font-size: 13.5px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
   line-height: 24px;
   white-space: nowrap;
 }
@@ -489,7 +499,7 @@
   max-width: 100% !important;
   width: 100%;
 }
-#browser .toolbar-addressbar .UrlBar-AddressField { margin-left: 3px; }
+#browser .toolbar-addressbar .UrlBar-AddressField { margin-left: 5px; }
 /* The native virtualizer needs a non-zero available width at startup. */
 #browser.tabs-top #tabs-container.top:not(:has(.tab-group-indicator,.tab-wrapper.group,.tab-wrapper.accordion,.is-pinned,.tab-yield-space,.tab-acceptsdrop)) .resize:has(.tab-strip:not(.horizontal-scrolling)):has(.tab-position) {
   flex: 1 1 auto;
@@ -594,6 +604,24 @@
   background: var(--nc-pressed);
   opacity: 1;
 }
+
+/* Native focus paint uses rectangular outlines inside the omnibox. The
+   Chromium-style circular InkDrop is the only button focus/pressed cue. */
+#browser#browser .toolbar-addressbar .UrlBar-AddressField :is(.button-toolbar,.BookmarkButton,.BookmarkButton-Button,button):is(:focus,:focus-visible),
+#browser#browser .toolbar-addressbar .UrlBar-AddressField :is(.button-toolbar,.BookmarkButton,.BookmarkButton-Button,button):is([aria-expanded="true"],.button-pressed,.button-selected) {
+  outline: 0 !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+#browser#browser .toolbar-addressbar .UrlBar-AddressField .button-toolbar:not(.SiteInfoButton) > button:is([aria-expanded="true"],.button-pressed,.button-selected)::before {
+  background: var(--nc-control-hover) !important;
+  opacity: 1 !important;
+}
+#browser#browser .toolbar-addressbar .BookmarkButton .button-on,
+#browser#browser .toolbar-addressbar .BookmarkButton .button-on .button-icon {
+  color: var(--nc-accent) !important;
+  fill: currentColor !important;
+}
 #browser .bookmark-bar {
   background: var(--nc-surface) !important;
   color: var(--nc-muted) !important;
@@ -695,9 +723,9 @@
   transition: none !important;
 }
 #browser.tabs-top #tabs-container.top .tab-wrapper:not(.accordion,.group,.in-accordion) > .tab {
-  left: 2.5px;
-  width: calc(100% - 5px) !important;
-  max-width: calc(100% - 5px) !important;
+  left: 3.5px;
+  width: calc(100% - 7px) !important;
+  max-width: calc(100% - 7px) !important;
 }
 #browser.tabs-top #tabs-container.top .tab:not(.active, .pinned) .tab-header::after {
   right: 0;
@@ -716,6 +744,9 @@
   isolation: isolate;
   color: var(--nc-newtab-ink) !important;
   background: transparent !important;
+}
+#browser:not(.theme-dark).tabs-top #tabs-container.top .tab .close {
+  color: var(--nc-newtab-ink) !important;
 }
 #browser#browser.tabs-top .toolbar-tabbar-after .button-toolbar.newtab > button::before {
   content: "";
@@ -905,10 +936,16 @@
   outline: 0 !important;
   box-shadow: inset 0 0 0 2px var(--nc-focus-ring) !important;
 }
+/* A typed value that has been left in the field retains a quiet, one-pixel
+   outline after focus leaves. Ordinary page URLs keep the normal fill. */
+#browser .toolbar-addressbar .UrlBar-AddressField:has(.SiteInfoButton.internal):has(#urlFieldInput:not(:focus):not(:placeholder-shown)):not(:has(.OmniDropdown)) {
+  background: var(--nc-surface) !important;
+  box-shadow: inset 0 0 0 1px var(--nc-typed-border) !important;
+}
 #browser .toolbar-addressbar .OmniDropdown {
   left: -4px !important;
   right: -4px !important;
-  padding: 6px 4px 10px !important;
+  padding: 6px 6px 10px !important;
   border: 0 !important;
   border-radius: 16px !important;
   background: var(--nc-surface) !important;
@@ -925,7 +962,7 @@
   --favicon-width: 40px;
   --grid-gap: 0px;
   min-height: 40px !important;
-  padding: 0 7px 0 4px !important;
+  padding: 0 6px 0 4px !important;
   border-radius: 0 20px 20px 0 !important;
   font-size: 14px !important;
   position: relative;
@@ -978,6 +1015,10 @@
 #browser .toolbar-addressbar .OmniLinkItem-DisplayText .displayUrl {
   color: var(--nc-link) !important;
 }
+#browser .toolbar-addressbar .OmniLinkItem--EngineSearch .displayUrl,
+#browser .toolbar-addressbar .OmniLinkItem--EngineSearch.OmniLinkItem--Highlighted .displayUrl {
+  color: var(--nc-ink) !important;
+}
 #browser .toolbar-addressbar .OmniLinkItem:not(.OmniLinkItem--Highlighted):hover,
 #browser .toolbar-addressbar .OmniLinkItem--Highlighted:not(.OmniLinkItem--ButtonFocus) {
   background: var(--nc-dropdown-highlight) !important;
@@ -986,6 +1027,9 @@
 }
 #browser .toolbar-addressbar .OmniLinkItem--Highlighted:not(.OmniLinkItem--ButtonFocus) .displayUrl {
   color: var(--nc-link) !important;
+}
+#browser .toolbar-addressbar .OmniLinkItem--EngineSearch.OmniLinkItem--Highlighted:not(.OmniLinkItem--ButtonFocus) .displayUrl {
+  color: var(--nc-ink) !important;
 }
 /* Vivaldi adds a trailing "Search" badge to its first suggestion. Chrome's
    default search match has no such action chip. */
@@ -1000,7 +1044,18 @@
   bottom: 4px;
   width: 4px;
   border-radius: 0 4px 4px 0;
-  background: var(--nc-focus);
+  background: var(--nc-accent);
+}
+#browser .toolbar-addressbar .OmniLinkItem-EraseButton {
+  position: relative;
+  width: 18px !important;
+  height: 18px !important;
+  margin-right: 0 !important;
+  color: var(--nc-erase-ink) !important;
+  fill: currentColor !important;
+}
+#browser .toolbar-addressbar .OmniLinkItem-EraseButton > :is(svg,img) {
+  display: none !important;
 }
 
 /* Chromium 152 tab hover card: 256px content width, 16:9 preview, 12px
