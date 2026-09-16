@@ -19,6 +19,7 @@
   --nc-separator: #e3e3e3;
   --nc-tab-separator: #c5c5c5;
   --nc-tab-ink: #474747;
+  --nc-newtab-ink: #474747;
   --nc-siteinfo-ink: #000000;
   --nc-focus-ring: #739cf0;
   --nc-boundary: #e0e1df;
@@ -46,6 +47,7 @@
   --nc-separator: #5f6368;
   --nc-tab-separator: #3e3e3e;
   --nc-tab-ink: #e4e4e4;
+  --nc-newtab-ink: #c7c7c7;
   --nc-siteinfo-ink: #ffffff;
   --nc-boundary: #494b4a;
   --nc-dropdown-highlight: #505050;
@@ -219,6 +221,18 @@
   color: var(--nc-ink) !important;
   border-radius: 8px 8px 0 0 !important;
   border-bottom: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+#browser.bookmark-bar-top.address-top:not(.is-settingspage, .popup) .mainbar:has(.toolbar-addressbar.toolbar-visible) {
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+#browser.bookmark-bar-top .bookmark-bar.address-top {
+  border-top: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
 }
 #browser:not(.is-settingspage, .popup).address-top .mainbar .toolbar-addressbar.toolbar-visible {
   height: 44px !important;
@@ -628,7 +642,7 @@
 #browser#browser.tabs-top .toolbar-tabbar-after .button-toolbar.newtab > button {
   position: relative;
   isolation: isolate;
-  color: #c7c7c7 !important;
+  color: var(--nc-newtab-ink) !important;
   background: transparent !important;
 }
 #browser#browser.tabs-top .toolbar-tabbar-after .button-toolbar.newtab > button::before {
