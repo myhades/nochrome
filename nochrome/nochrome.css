@@ -2,6 +2,7 @@
  * Original: ../legacy/nochrome-v2.css. Local CSS only, no scripts or network.
  */
 #browser {
+  --nc-hover-fade: 120ms;
   --nc-surface: #ffffff;
   --nc-frame: #e3e3e3;
   --nc-ink: #1f1f1f;
@@ -136,7 +137,7 @@
   background: var(--nc-hover);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 150ms ease-in;
+  transition: opacity var(--nc-hover-fade) ease-in;
 }
 #browser.tabs-top #tabs-container.top .tab-wrapper:has(> .tab:hover:not(.active))::before {
   opacity: 1;
@@ -182,6 +183,7 @@
   display: grid !important;
   place-items: center;
   position: relative;
+  transition: background-color var(--nc-hover-fade) ease-in-out;
 }
 #browser.tabs-top #tabs-container.top .tab .close:hover {
   background: color-mix(in srgb, var(--nc-ink) 15%, transparent);
@@ -226,6 +228,7 @@
   min-width: 28px;
   border-radius: 50%;
   color: var(--nc-muted);
+  transition: background-color var(--nc-hover-fade) ease-in-out;
 }
 #browser.tabs-top #tabs-container.top :is(.toolbar-tabbar-before, .toolbar-tabbar-after) .button-toolbar > button:hover { background: var(--nc-hover); }
 /* Keep macOS native traffic lights and window dragging. */
@@ -286,7 +289,7 @@
   background: var(--nc-field-hover);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 200ms ease-in;
+  transition: opacity var(--nc-hover-fade) ease-in;
 }
 #browser .toolbar-addressbar .UrlBar-AddressField > :not(.UrlBar-UrlFieldWrapper) {
   position: relative;
@@ -324,7 +327,7 @@
   min-height: 32px;
   border-radius: 50%;
   color: var(--nc-muted);
-  transition: color 120ms linear;
+  transition: color var(--nc-hover-fade) linear;
 }
 #browser .toolbar-addressbar .SiteInfoButton {
   min-width: 24px !important;
@@ -348,7 +351,7 @@
   box-shadow: none !important;
   outline: 0 !important;
   background: var(--nc-chip) !important;
-  transition: background-color 250ms ease-in-out;
+  transition: background-color var(--nc-hover-fade) ease-in-out;
 }
 #browser .toolbar-addressbar .SiteInfoButton:not(.insecure) > button {
   color: var(--nc-siteinfo-ink) !important;
@@ -594,7 +597,7 @@
   background: var(--nc-control-hover);
   opacity: 0;
   transform: translate(-50%, -50%);
-  transition: opacity 250ms ease-in-out;
+  transition: opacity var(--nc-hover-fade) ease-in-out;
   pointer-events: none;
 }
 
@@ -698,7 +701,7 @@
   background: transparent !important;
   font-size: 13px !important;
   gap: 6px !important;
-  transition: background-color 200ms ease-in !important;
+  transition: background-color var(--nc-hover-fade) ease-in !important;
 }
 #browser .bookmark-bar .bookmarkbarItem:hover {
   background: var(--nc-control-hover) !important;
@@ -757,7 +760,7 @@
 /* Chrome 152 geometry and states. */
 #browser.tabs-top #tabs-container.top .tab:not(.active, .pinned) .tab-header::after {
   opacity: 1;
-  transition: opacity 150ms ease-in;
+  transition: opacity var(--nc-hover-fade) ease-in;
 }
 #browser.tabs-top #tabs-container.top .tab-position:has(> .tab-wrapper > .tab.active) .tab-header::after,
 #browser.tabs-top #tabs-container.top .tab-strip > span:has(+ span > .tab-position > .tab-wrapper > .tab.active) > .tab-position .tab-header::after {
@@ -804,7 +807,7 @@
   background: var(--nc-hover);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 150ms ease-in;
+  transition: opacity var(--nc-hover-fade) ease-in;
 }
 #browser#browser.tabs-top .toolbar-tabbar-after .button-toolbar.newtab > button:hover::before {
   opacity: 1;
@@ -886,6 +889,7 @@
   justify-content: space-between;
   text-align: left;
   font: inherit;
+  transition: background-color var(--nc-hover-fade) ease-in-out;
 }
 #browser .nc-menu-item:hover,
 #browser .nc-menu-zoom button:hover { background: color-mix(in srgb, var(--nc-ink) 10%, transparent); }
@@ -902,6 +906,7 @@
   background: transparent;
   color: inherit;
   font: inherit;
+  transition: background-color var(--nc-hover-fade) ease-in-out;
 }
 #browser .nc-menu-zoom .nc-menu-zoom-reset { border-radius: 6px; }
 
@@ -1023,6 +1028,7 @@
   border-radius: 0 20px 20px 0 !important;
   font-size: 14px !important;
   position: relative;
+  transition: background-color var(--nc-hover-fade) ease-in-out;
 }
 #browser .toolbar-addressbar .OmniLinkItem-Favicon {
   width: 40px !important;
@@ -1121,6 +1127,7 @@
   margin-right: 0 !important;
   color: var(--nc-erase-ink) !important;
   fill: currentColor !important;
+  transition: background-color var(--nc-hover-fade) ease-in-out;
 }
 #browser .toolbar-addressbar .OmniLinkItem-EraseButton > :is(svg,img) {
   display: none !important;
