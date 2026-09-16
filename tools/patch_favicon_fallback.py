@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Replace Vivaldi's generic missing-favicon document image with Chromium search."""
+"""Install Chromium's fallback icon and retain the search-engine omnibox logo."""
 from pathlib import Path
 from urllib.parse import quote
 import re
@@ -13,6 +13,11 @@ DEFAULT_BUNDLE = Path(
 PNG_FALLBACK = re.compile(
     r'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0[0-9A-Za-z+/=]+'
 )
+EMPTY_CANDIDATE = (
+    'if(n){let e="favicon";return"url"===n.faviconType?e="url":'
+    '"img"===n.faviconType&&(e="img"),{favIconUrl:n.faviconUrl,favIconType:e}}'
+)
+ENGINE_FALLBACK = EMPTY_CANDIDATE.replace("if(n){", "if(n?.faviconUrl){", 1)
 
 
 def chromium_search_data_url() -> str:
@@ -47,14 +52,24 @@ def main() -> None:
     bundle = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_BUNDLE
     text = bundle.read_text()
     replacement = chromium_search_data_url()
-    if replacement in text:
-        print("Chromium favicon fallback already installed")
+    updated = text
+    changes = []
+    if replacement not in updated:
+        updated, count = PNG_FALLBACK.subn(replacement, updated, count=1)
+        if count != 1:
+            raise SystemExit("Expected Vivaldi missing-favicon fallback was not found")
+        changes.append("Chromium missing-favicon fallback")
+    if ENGINE_FALLBACK not in updated:
+        count = updated.count(EMPTY_CANDIDATE)
+        if count != 1:
+            raise SystemExit("Expected omnibox candidate-favicon branch was not found")
+        updated = updated.replace(EMPTY_CANDIDATE, ENGINE_FALLBACK, 1)
+        changes.append("search-engine fallback for candidates without favicons")
+    if not changes:
+        print("Favicon patches already installed")
         return
-    updated, count = PNG_FALLBACK.subn(replacement, text, count=1)
-    if count != 1:
-        raise SystemExit("Expected Vivaldi missing-favicon fallback was not found")
     bundle.write_text(updated)
-    print("Installed Chromium missing-favicon fallback")
+    print("Installed " + " and ".join(changes))
 
 
 if __name__ == "__main__":

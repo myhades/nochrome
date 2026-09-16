@@ -12,7 +12,7 @@ Chrome-inspired browser chrome, based on [nokocu/nochrome](https://github.com/no
 4. In Settings → Themes, import `nochrome/theme-nochrome-light.zip` and `nochrome/theme-nochrome-dark.zip`.
 5. Under Theme Schedule choose **Operating System**; map **Light → noChrome Light**, **Dark → noChrome Dark**. Importing a theme may replace the current schedule entry, so configure the schedule after both imports.
 6. Enable **Use Icon Set from → Currently Active Theme**.
-7. On the tested macOS version, run `python3 tools/patch_macos_menu.py` and then `python3 tools/patch_favicon_fallback.py`. Restart to add the functioning three-dot menu and replace Vivaldi's missing-favicon document image with Chromium's search icon. These modify the installed `bundle.js`; the unmodified resource is backed up under `~/Library/Application Support/noChrome/backups/8.2.4133.52/`.
+7. On the tested macOS version, run `python3 tools/patch_macos_menu.py` and then `python3 tools/patch_favicon_fallback.py`. Restart to add the functioning three-dot menu, replace Vivaldi's missing-favicon document image with Chromium's search icon, and retain the current search-engine logo when the selected omnibox candidate has no favicon. These modify the installed `bundle.js`; the unmodified resource is backed up under `~/Library/Application Support/noChrome/backups/8.2.4133.52/`.
 
 On the tested Mac, typing the CSS path directly produced a startup splash hang; selecting the same directory through the native folder picker worked, including a subsequent full restart. Use the picker rather than pasting into the settings field.
 
