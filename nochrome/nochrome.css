@@ -617,6 +617,36 @@
   background: var(--nc-control-hover) !important;
   opacity: 1 !important;
 }
+
+/* Vivaldi paints the bookmark control twice: the inner toolbar button gets
+   its normal state paint, then BookmarkButton adds a rectangular hover border
+   and a darker --Active background while its popup is open.  Strip both
+   native layers so this control uses the same circular InkDrop as the other
+   Chromium omnibox actions. */
+#browser#browser .toolbar-addressbar .UrlBar-AddressField .BookmarkButton,
+#browser#browser .toolbar-addressbar .UrlBar-AddressField .BookmarkButton:is(:hover,:active,:focus,:focus-visible,:focus-within),
+#browser#browser .toolbar-addressbar .UrlBar-AddressField .BookmarkButton.BookmarkButton--Active,
+#browser#browser .toolbar-addressbar .UrlBar-AddressField .BookmarkButton .BookmarkButton-Button,
+#browser#browser .toolbar-addressbar .UrlBar-AddressField .BookmarkButton .ToolbarButton-Button,
+#browser#browser .toolbar-addressbar .UrlBar-AddressField .BookmarkButton .ToolbarButton-Button:is(:hover,:active,:focus,:focus-visible,[aria-expanded="true"],.button-pressed,.button-selected) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+/* The remaining omnibox actions must also suppress Vivaldi's square pressed
+   and keyboard-focus paint; their ::before layer above supplies the feedback. */
+#browser#browser .toolbar-addressbar .UrlBar-AddressField .toolbar-insideinput .button-toolbar:not(.SiteInfoButton) > button:is(:hover,:active,:focus,:focus-visible,[aria-expanded="true"],[aria-pressed="true"],.button-pressed,.button-selected) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
 #browser#browser .toolbar-addressbar .BookmarkButton .button-on,
 #browser#browser .toolbar-addressbar .BookmarkButton .button-on .button-icon {
   color: var(--nc-accent) !important;
